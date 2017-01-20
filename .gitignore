@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log*
+bower_components
+bundles
+packages/
+lib/
+src/bundles/
+.DS_STORE
+.idea
+.delphi
+nohup.out
+.generated/
+*bundle*
+.eslintcache
+.docs.cache
