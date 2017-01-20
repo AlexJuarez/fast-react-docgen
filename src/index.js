@@ -5,11 +5,16 @@ import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Router, Route, browserHistory } from 'react-router';
+import getNavData from './actions/nav';
+import getDocs from './actions/docs';
 
 const rootNode = document.getElementById('docs');
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
+
+store.dispatch(getNavData());
+store.dispatch(getDocs());
 
 const render = (Component, root) => {
   ReactDOM.render(

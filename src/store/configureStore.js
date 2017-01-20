@@ -8,10 +8,14 @@ import createLogger from 'redux-logger';
 // import type { State } from '../state';
 import DevTools from '../devtools/DevTools';
 import { routerReducer } from 'react-router-redux'
+import nav from '../reducers/nav';
+import docs from '../reducers/docs';
 
 export default function configureStore(): Store<*, *> {
   const reducer = combineReducers({
-    routing: routerReducer
+    routing: routerReducer,
+    nav,
+    docs
   });
 
   const store = createStore(

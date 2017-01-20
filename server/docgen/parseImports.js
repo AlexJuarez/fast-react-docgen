@@ -44,6 +44,7 @@ const getCache = (key, fn) => {
 }
 
 module.exports = (filePath, opts) => {
+  let didUpdate = false;
   const components = getCache(filePath, () => {
     const output = [];
     const resolver = Resolver(opts.cwd);
@@ -64,6 +65,7 @@ module.exports = (filePath, opts) => {
         }
       });
 
+    didUpdate = true;
     return output;
   });
 
@@ -71,6 +73,7 @@ module.exports = (filePath, opts) => {
   out.forEach(c => {
     getCache(c, () => {
       const src = fs.readFileSync(c, { encoding: 'utf8' });
+      didUpdate = true;
       return getDocs(src);
     });
   });

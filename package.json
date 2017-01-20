@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate:dll": "webpack --progress --colors --config webpack.dll.js",
+    "start": "if [ ! -f './public/dll/vendor-manifest.json' ]; then npm run generate:dll; fi && node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -39,6 +40,7 @@
     "react-router-redux": "^4.0.7",
     "recast": "^0.11.20",
     "redux": "^3.6.0",
+    "redux-action": "^1.2.1",
     "redux-devtools": "^3.3.2",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.2.0",

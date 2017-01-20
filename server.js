@@ -23,6 +23,8 @@ server.get('/api/imports', (req, res) => {
   });
 });
 
+server.use('/public', express.static(path.resolve(__dirname, 'public')));
+
 server.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public/index.html'));
 });

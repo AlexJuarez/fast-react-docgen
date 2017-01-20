@@ -13,3 +13,5 @@ nohup.out
 *bundle*
 .eslintcache
 .docs.cache
+
+public/dll/**/*
