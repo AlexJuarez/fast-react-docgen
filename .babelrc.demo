@@ -1,0 +1,15 @@
+{
+  "presets": ["react", "es2015", "stage-1"],
+  "plugins": [
+    "flow-react-proptypes",
+    "transform-runtime",
+    "transform-decorators-legacy",
+    "transform-decorators",
+    "syntax-decorators",
+    "add-module-exports"
+  ],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true,
+    "allowImportExportEverywhere": true
+  }
+}

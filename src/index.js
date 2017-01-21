@@ -8,8 +8,6 @@ import { Router, Route, browserHistory } from 'react-router';
 import getNavData from './actions/nav';
 import getDocs from './actions/docs';
 
-require('./requires');
-
 const rootNode = document.getElementById('docs');
 
 const store = configureStore();

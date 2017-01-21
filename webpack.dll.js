@@ -14,7 +14,7 @@ module.exports = {
     new webpack.DllPlugin({
       path: path.join(__dirname, 'public', 'dll', '[name]-manifest.json'),
       name: '[name]',
-      context: path.resolve(__dirname, 'client')
+      context: '.'
     })
   ],
   resolve: {

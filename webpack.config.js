@@ -21,7 +21,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.DllReferencePlugin({
-      context: path.join(__dirname, 'public'),
+      context: '.',
       manifest: require('./public/dll/vendor-manifest.json')
     })
   ],
@@ -37,13 +37,6 @@ module.exports = {
       },
       include: [/src/],
       exclude: [/node_modules/]
-    }, {
-      test: /\.demo\.jsx/,
-      loader: 'babel-loader',
-      query: {
-        cacheDirectory: true,
-        extends: path.resolve('./.babelrc')
-      }
     }],
   },
   cache: true

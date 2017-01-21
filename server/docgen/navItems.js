@@ -11,18 +11,6 @@ function getTitle(filePath) {
   return path.basename(filePath).replace('.demo.jsx', '');
 }
 
-function writeGeneratedFile(files, cwd) {
-  const output = files
-    .map(f => `require('${path.resolve(cwd, f)}');`)
-    .join('\n');
-
-  const outputPath = path.resolve(process.cwd(), 'src', 'requires.js');
-
-  if (!fs.existsSync(outputPath)) {
-    fs.writeFileSync(outputPath, output);
-  }
-}
-
 function navItems(src, opts) {
   const files = glob.sync(src, opts);
 
@@ -44,8 +32,6 @@ function navItems(src, opts) {
       file: fullPath,
     });
   });
-
-  writeGeneratedFile(files, opts.cwd);
 
   return {
     files: Object.keys(demos),

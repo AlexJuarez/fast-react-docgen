@@ -1,10 +1,12 @@
 const express = require('express');
 const EventEmitter = require('events');
 const webpack = require('./webpack');
+const routes = require('./routes');
 const http = require('http');
 const compression = require('compression');
 const logger = require('./util/logger');
 const log = logger.create('server');
+
 
 class Server extends EventEmitter {
   constructor(config = {}) {
@@ -15,6 +17,7 @@ class Server extends EventEmitter {
 
     this.use(compression());
     webpack(this._app, require('../webpack.config'));
+    routes(this._app);
   }
 
   use(...args) {
