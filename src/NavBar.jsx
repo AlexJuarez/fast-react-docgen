@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import NavBarItem from 'NavBar/NavBarItem';
 
 type NavItem = {
   title: string,

@@ -8,5 +8,9 @@
     "transform-decorators",
     "syntax-decorators",
     "add-module-exports"
-  ]
+  ],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true,
+    "allowImportExportEverywhere": true
+  }
 }

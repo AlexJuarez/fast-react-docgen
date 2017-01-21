@@ -31,9 +31,19 @@ module.exports = {
       loaders: ['json-loader'],
     }, {
       test: /(\.jsx|\.js)?$/,
-      loaders: ['babel?cacheDirectory'],
+      loader: 'babel-loader',
+      query: {
+        cacheDirectory: true,
+      },
       include: [/src/],
       exclude: [/node_modules/]
+    }, {
+      test: /\.demo\.jsx/,
+      loader: 'babel-loader',
+      query: {
+        cacheDirectory: true,
+        extends: path.resolve('./.babelrc')
+      }
     }],
   },
   cache: true
