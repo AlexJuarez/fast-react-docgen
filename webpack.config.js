@@ -14,8 +14,11 @@ module.exports = {
     './src/index.js'
   ],
   resolve: {
+    alias: {
+      txl: path.resolve(__dirname, '..', 'TXL_components', 'src'),
+    },
     extensions: ['', '.js', '.jsx'],
-    root: path.resolve(__dirname, 'src'),
+    root: path.resolve(__dirname, 'src')
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

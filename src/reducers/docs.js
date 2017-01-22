@@ -1,7 +1,11 @@
-import { createReducer } from 'redux-action'
+import { Map } from 'immutable';
 
-const defaultState = {};
+export default (state = Map(), action) => {
+  switch(action.type) {
+    case 'get docs': {
+      return Map(action.payload);
+    }
+  }
 
-export default createReducer(defaultState, {
-  'get docs': payload => (payload)
-});
+  return state;
+};

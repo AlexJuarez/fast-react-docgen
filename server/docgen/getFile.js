@@ -15,7 +15,6 @@ const getConfig = (filename) => ({
   entry: filename,
   resolve: {
     extensions: ['', '.js', '.jsx'],
-    root: path.resolve(ROOT, 'src'),
   },
   plugins: [
     new webpack.DllReferencePlugin({

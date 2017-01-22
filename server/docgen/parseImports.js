@@ -80,5 +80,9 @@ module.exports = (filePath, opts) => {
 
   fs.writeFileSync(path.resolve(process.cwd(), '.docs.cache'), JSON.stringify(imports));
 
-  return out.map(c => imports[c].data);
+  const output = {};
+
+  out.forEach(c => output[path.parse(c).name] = imports[c].data);
+
+  return output;
 };

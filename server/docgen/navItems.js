@@ -28,8 +28,8 @@ function navItems(src, opts) {
     demos[fullPath] = true;
 
     categories[category].push({
-      title: getTitle(filePath),
       file: fullPath,
+      title: getTitle(filePath),
     });
   });
 
