@@ -4,8 +4,6 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import type { Store } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
-// import state from '../state';
-// import type { State } from '../state';
 import DevTools from '../devtools/DevTools';
 import { routerReducer } from 'react-router-redux'
 import nav from '../reducers/nav';
@@ -20,11 +18,15 @@ export default function configureStore(): Store<*, *> {
     demos
   });
 
+  const middleware = [thunk];
+  if (window.enableReduxLogger) {
+    middleware.push(createLogger());
+  }
+
   const store = createStore(
     reducer,
-    // state,
     compose(
-      applyMiddleware(thunk, createLogger()),
+      applyMiddleware(...middleware),
       window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument(),
     ),
   );

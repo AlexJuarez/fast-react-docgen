@@ -18,7 +18,7 @@ type Props = {
   category: string,
   title: string,
   file: string,
-  docs: any,
+  docs: ?any,
   demo: ?string,
   dispatch: Dispatch
 };
@@ -54,16 +54,29 @@ export default class Demo extends Component {
     return <PropTable docs={docs} />;
   }
 
-  _renderSpinner() {
-    if (this.props.demo != null) {
+  _renderDemo() {
+    const { demo } = this.props;
+
+    if (demo == null) {
+      return <LoadingIndicator color={COLOR_ACCENT['500']} size="medium" shade="base"/>;
+    }
+
+    return <Example code={demo} />;
+
+  }
+
+  _renderDescription() {
+    const { docs } = this.props;
+
+    if (docs == null) {
       return null;
     }
 
-    return <LoadingIndicator color={COLOR_ACCENT['500']} size="medium" shade="base"/>;
+    return <div style={DESCRIPTION_STYLES}>{docs.description}</div>;
   }
 
   render() {
-    const { title, docs, demo } = this.props;
+    const { title } = this.props;
 
     return (
       <div>
@@ -72,9 +85,8 @@ export default class Demo extends Component {
           <Container>
             <div style={CONTAINER_STYLES}>
               <h2 style={HEADER_TITLE_STYLES}>Demo</h2>
-              <div style={DESCRIPTION_STYLES}>{docs.description}</div>
-              {this._renderSpinner()}
-              <Example code={demo} />
+              {this._renderDescription()}
+              {this._renderDemo()}
             </div>
           </Container>
           <div style={{ height: 20 }} />

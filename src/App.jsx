@@ -9,16 +9,15 @@ import StyleRoot from 'txl/styles/StyleRoot';
 
 import Layout from './Layout';
 import Demo from './Demo';
-import getDemo from './actions/demos';
 
 type Props = {
   nav: Map<string, Array<{ title: string, file: string }>>,
   docs: any,
   demos: Map<string, string>,
   dispatch: Dispatch,
-  params?: {
-    category?: string,
-    title?: string
+  params: {
+    category: ?string,
+    title: ?string
   }
 }
 
