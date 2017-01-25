@@ -14,7 +14,7 @@ const getConfig = (filename) => ({
   },
   entry: filename,
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
   plugins: [
     new webpack.DllReferencePlugin({
@@ -23,33 +23,43 @@ const getConfig = (filename) => ({
     }),
   ],
   module: {
-    loaders: [{
-      test: /\.json$/,
-      loaders: ['json-loader'],
-    }, {
+    rules: [{
       test: /(\.jsx|\.js)?$/,
-      loader: 'babel-loader',
-      query: {
-        cacheDirectory: true,
-      },
-      exclude: [/node_modules/]
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: true,
+        },
+      }],
+      include: [/src/]
     }, {
       test: /\.demo\.jsx/,
-      loaders: [
-        path.resolve(ROOT, './webpack/custom-loader.js'),
-        'babel-loader?cacheDirectory&extends=' +
-        path.resolve(ROOT, '.babelrc.demo')
-      ]
+      use: [{
+        loader: path.resolve(ROOT, './webpack/custom-loader.js'),
+      }, {
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: true,
+          extends: path.resolve(ROOT, '.babelrc.demo')
+        }
+      }],
+      include: [/src/]
     }]
   }
 });
 
 module.exports = (filename) => {
+  try {
+    webpack(getConfig(filename));
+  } catch (err) {
+    log.error(err);
+  }
   const compiler = webpack(getConfig(filename));
   compiler.outputFileSystem = fs;
   return new Promise(resolve => {
     compiler.run((err, stats) => {
       log.debug(`file: ${filename} compiled in ${stats.endTime - stats.startTime} ms`);
+      require('fs').writeFileSync(path.resolve(process.cwd(), 'stats.json'), JSON.stringify(stats.toJson('verbose'), null, ' '));
       resolve(fs.readFileSync(path.join(ROOT, 'main.bundle.js')));
     });
   });

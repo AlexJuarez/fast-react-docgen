@@ -18,7 +18,6 @@ module.exports = {
     })
   ],
   resolve: {
-    root: path.resolve(__dirname, 'src'),
-    modulesDirectories: ['node_modules']
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
   }
 };

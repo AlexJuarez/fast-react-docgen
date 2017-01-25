@@ -17,8 +17,8 @@ module.exports = {
     alias: {
       txl: path.resolve(__dirname, '..', 'TXL_components', 'src'),
     },
-    extensions: ['', '.js', '.jsx'],
-    root: path.resolve(__dirname, 'src')
+    extensions: ['.js', '.jsx', '.json'],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -29,18 +29,36 @@ module.exports = {
     })
   ],
   module: {
-    loaders: [{
-      test: /\.json$/,
-      loaders: ['json-loader'],
-    }, {
-      test: /(\.jsx|\.js)?$/,
-      loader: 'babel-loader',
-      query: {
-        cacheDirectory: true,
+    rules: [
+      {
+        test: /\.json$/,
+        use: [{
+          loader: 'json-loader',
+        }]
       },
-      include: [/src/],
-      exclude: [/node_modules/]
-    }],
+      {
+        test: /(\.jsx|\.js)?$/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          }
+        }],
+        include: /src/
+      },
+      {
+        test: /\.demo\.jsx/,
+        use: [{
+          loader: path.resolve(__dirname, './webpack/custom-loader.js'),
+        }, {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            extends: path.resolve(__dirname, '.babelrc.demo')
+          }
+        }]
+      }
+    ]
   },
   cache: true
 };
