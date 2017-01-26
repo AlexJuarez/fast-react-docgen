@@ -19,7 +19,9 @@ type Props = {
   title: string,
   file: string,
   docs: ?any,
-  demo: ?string,
+  demo: ?{
+    code: string
+  },
   dispatch: Dispatch
 };
 
@@ -28,20 +30,24 @@ export default class Demo extends Component {
 
   constructor(props: Props, context: Object) {
     super(props, context);
+
+    this.state = {
+      demo: require('txl/progress-indicators/DotsLoadingIndicator.demo.jsx')
+    };
   }
 
   componentDidMount() {
     const { file, dispatch } = this.props;
 
-    dispatch(getDemo(file));
+    // dispatch(getDemo(file));
   }
 
   componentWillReceiveProps(nextProps: Props) {
     const { file, dispatch } = this.props;
 
-    if (nextProps.file !== file) {
-      dispatch(getDemo(nextProps.file));
-    }
+    // if (nextProps.file !== file) {
+    //    dispatch(getDemo(nextProps.file));
+    // }
   }
 
   _renderProps() {
@@ -55,13 +61,15 @@ export default class Demo extends Component {
   }
 
   _renderDemo() {
-    const { demo } = this.props;
+    const { demo } = this.state;
+
+
 
     if (demo == null) {
       return <LoadingIndicator color={COLOR_ACCENT['500']} size="medium" shade="base"/>;
     }
 
-    return <Example code={demo} />;
+    return demo;
 
   }
 

@@ -24,7 +24,7 @@ class Layout extends Component {
   props: Props;
 
   render() {
-    const { items, children } = this.props;
+    const { activeNames, items, children } = this.props;
 
     return (
       <div style={APP_CONTAINER_STYLES}>
@@ -35,7 +35,7 @@ class Layout extends Component {
         />
         <div style={PAGE_CONTAINER_STYLE}>
           <div style={NAVBAR_STYLE}>
-            <NavBar items={items} />
+            <NavBar items={items} activeNames={activeNames} />
           </div>
           <div style={CONTENT_PANE_STYLE}>
             <div style={CONTENT_COLUMN_STYLE}>

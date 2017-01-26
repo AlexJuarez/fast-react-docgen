@@ -8,7 +8,8 @@ import {
 import StyleRoot from 'txl/styles/StyleRoot';
 
 type Props = {
-  code: ?string,
+  code: string,
+  styleRoot: boolean,
 };
 
 export default class Example extends Component {
@@ -40,6 +41,10 @@ export default class Example extends Component {
     }
 
     unmountComponentAtNode(this._ref);
+
+    if (this.props.styleRoot) {
+      element = <StyleRoot>{element}</StyleRoot>;
+    }
 
     try {
       render(element, this._ref);

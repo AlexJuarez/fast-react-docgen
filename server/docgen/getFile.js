@@ -59,8 +59,12 @@ module.exports = (filename) => {
   return new Promise(resolve => {
     compiler.run((err, stats) => {
       log.debug(`file: ${filename} compiled in ${stats.endTime - stats.startTime} ms`);
-      require('fs').writeFileSync(path.resolve(process.cwd(), 'stats.json'), JSON.stringify(stats.toJson('verbose'), null, ' '));
-      resolve(fs.readFileSync(path.join(ROOT, 'main.bundle.js')));
+      const styleRoot = stats
+        .toJson('verbose')
+        .modules
+        .some(module => module.name.indexOf('animations.js') !== -1);
+      const code = fs.readFileSync(path.join(ROOT, 'main.bundle.js')).toString();
+      resolve(code);
     });
   });
-}
+};

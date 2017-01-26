@@ -16,7 +16,7 @@ export default createAction('get demo', (filename) => {
       .end((err, res) => {
         delete queries[filename];
         if (!err) {
-          resolve({ file: filename, code: res.text });
+          resolve({ file: filename, result: res.body });
         }
 
         reject(err);

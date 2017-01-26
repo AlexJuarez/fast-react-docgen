@@ -39,10 +39,11 @@ class App extends Component {
   props: Props;
 
   _getNavItems() {
-    const {nav} = this.props;
+    const {nav, params} = this.props;
 
-    return nav.keySeq().toArray().map(group => ({
+    const items = nav.keySeq().toArray().map(group => ({
       display: group,
+      expanded: (params.category === group),
       items: nav.get(group).map(item => ({
         display: item.title,
         name: `${group}/${item.title}`,
@@ -50,6 +51,8 @@ class App extends Component {
       })),
       name: group
     }));
+
+    return items.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   _getFile() {
@@ -103,7 +106,7 @@ class App extends Component {
 
     return (
       <StyleRoot>
-        <Layout items={this._getNavItems()}>
+        <Layout items={this._getNavItems()} activeNames={[this.props.params.title]}>
           {this._renderDemo()}
         </Layout>
       </StyleRoot>

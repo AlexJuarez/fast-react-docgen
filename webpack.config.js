@@ -1,5 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+const glob = require('glob');
+
+const demos = glob.sync('../TXL_components/src/**/*.demo.jsx', { absolute: true });
 
 module.exports = {
   output: {
@@ -56,7 +59,8 @@ module.exports = {
             cacheDirectory: true,
             extends: path.resolve(__dirname, '.babelrc.demo')
           }
-        }]
+        }],
+        include: demos
       }
     ]
   },
