@@ -7,7 +7,7 @@ import {
   HEAD_CELL_STYLE,
   SHORT_CELL_STYLE,
   LONG_CELL_STYLE,
-} from './styles';
+} from '../styles';
 
 const typeToString = (typeDoc) => {
   if (!typeDoc) {

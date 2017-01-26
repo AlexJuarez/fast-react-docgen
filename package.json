@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate:dll": "webpack --progress --colors --config webpack.dll.js",
-    "start": "if [ ! -f './public/dll/vendor-manifest.json' ]; then npm run generate:dll; fi && node server.js"
+    "start": "node ./cli.js start -l debug"
+  },
+  "bin": {
+    "txl-docs": "./cli.js"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +28,7 @@
     "babel-standalone": "^6.21.1",
     "babylon": "^6.15.0",
     "builtin-modules": "^1.1.1",
+    "commander": "^2.9.0",
     "compression": "^1.6.2",
     "core-js": "^2.4.1",
     "enhanced-resolve": "^3.0.3",
@@ -45,6 +48,7 @@
     "log4js": "^1.1.0",
     "memory-fs": "^0.4.1",
     "moment": "^2.17.1",
+    "open": "0.0.5",
     "radium": "^0.18.0",
     "react": "^15.4.2",
     "react-docgen": "^2.13.0",

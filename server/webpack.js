@@ -4,13 +4,19 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 
 const cache = require('./docgen/cache');
 const logger = require('./util/logger');
+const webpackConfig = require('../webpack.config');
 const log = logger.create('webpack');
 
 module.exports = (app, config) => {
-  const compiler = webpack(config);
+  const wpc = webpackConfig(config);
+  const compiler = webpack(wpc);
+
+  log.info('webpack compiler started');
 
   compiler.plugin('done', (stats) => {
-    cache.set(stats.hash);
+    const start = new Date();
+    cache.set(stats.hash, config);
+    log.info(`cache built in ${new Date() - start} ms`);
     log.debug(stats.toString({ colors: true }));
   });
 
@@ -18,12 +24,12 @@ module.exports = (app, config) => {
     noInfo: true,
     hot: true,
     historyApiFallback: true,
-    publicPath: config.output.publicPath,
+    publicPath: wpc.output.publicPath,
     stats: { colors: true },
   }));
 
   app.use(webpackHotMiddleware(compiler, {
-    log: (...args) => log.debug(...args),
+    log: (...args) => log.info(...args),
     path: '/__webpack_hmr',
     heartbeat: 10 * 1000,
   }));

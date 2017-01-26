@@ -16,7 +16,7 @@ class Server extends EventEmitter {
     this._app = express();
 
     this.use(compression());
-    webpack(this._app, require('../webpack.config'));
+    webpack(this._app, config);
     routes(this._app);
   }
 
@@ -31,9 +31,9 @@ class Server extends EventEmitter {
   start() {
     this._server = http.createServer(this._app).listen(this._port);
 
-    const { address, port } = this._server.address();
+    const { port } = this._server.address();
 
-    log.debug(`listening at ${address}:${port}`);
+    log.info(`listening at localhost:${port} & 0.0.0.0:${port}`);
     this.emit('ready');
   }
 }

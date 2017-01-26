@@ -3,23 +3,20 @@ const path = require('path');
 const parseImports = require('./parseImports');
 const fs = require('fs');
 
-function getCategory(filePath) {
-  return filePath.split(path.sep).splice(-2).reverse().pop();
-}
+const getCategory = (filePath) => filePath.split(path.sep).splice(-2).reverse().pop();
 
-function getTitle(filePath) {
-  return path.basename(filePath).replace('.demo.jsx', '');
-}
+const getTitle = (filePath, demoExt) => path.basename(filePath).replace(demoExt, '');
 
-function navItems(src, opts) {
-  const files = glob.sync(src, opts);
+function navItems(src, { cwd, demoExt}) {
+  const files = glob.sync(src, { cwd });
+  const txlSrc = path.join(cwd, 'src');
 
   const categories = {};
   const demos = {};
 
   files.forEach((filePath) => {
     const category = getCategory(filePath);
-    const fullPath = path.resolve(opts.cwd, filePath);
+    const fullPath = path.resolve(cwd, filePath);
 
     if (categories[category] == null) {
       categories[category] = [];
@@ -29,7 +26,7 @@ function navItems(src, opts) {
 
     categories[category].push({
       file: fullPath,
-      title: getTitle(filePath),
+      title: getTitle(filePath, demoExt),
     });
   });
 
@@ -38,9 +35,9 @@ function navItems(src, opts) {
       .map(file => ({
         path: file,
         category: getCategory(file),
-        title: getTitle(file)
+        title: getTitle(file, demoExt)
       })),
-    cwd: opts.cwd,
+    cwd: cwd,
     categories
   };
 }

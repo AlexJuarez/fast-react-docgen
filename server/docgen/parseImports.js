@@ -7,7 +7,7 @@ const logger = require('../util/logger');
 const log = logger.create('parse-imports');
 
 const getImports = () => {
-  if (fs.existsSync(process.cwd(), '.docs.cache')) {
+  if (fs.existsSync(path.resolve(__dirname, '..', '..', '.docs.cache'))) {
     try {
       return JSON.parse(fs.readFileSync('.docs.cache'));
     } catch (err) {
@@ -78,7 +78,7 @@ module.exports = (filePath, opts) => {
     });
   });
 
-  fs.writeFileSync(path.resolve(process.cwd(), '.docs.cache'), JSON.stringify(imports));
+  fs.writeFileSync(path.resolve(__dirname, '..', '..', '.docs.cache'), JSON.stringify(imports));
 
   const output = {};
 

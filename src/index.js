@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { Router, browserHistory, Route } from 'react-router';
+import { browserHistory } from 'react-router';
+import { AppContainer } from 'react-hot-loader';
 
-import App from './App';
 import configureStore from './store/configureStore';
 import getNavData from './actions/nav';
 import getDocs from './actions/docs';
+import Root from './containers/Root';
 
 const rootNode = document.getElementById('docs');
 
@@ -17,24 +17,21 @@ const history = syncHistoryWithStore(browserHistory, store);
 store.dispatch(getNavData());
 store.dispatch(getDocs());
 
-const render = (Component, root) => {
+const render = (Root, root) => {
   ReactDOM.render(
-    <Provider store={store} key="provider">
-      <Router history={history}>
-        <Route path=":category/:title" component={Component} />
-        <Route path="/" component={Component} />
-      </Router>
-    </Provider>,
+    <AppContainer>
+      <Root store={store} history={history} />
+    </AppContainer>,
     root
   );
 };
 
-render(App, rootNode);
+render(Root, rootNode);
 
 if (module.hot) {
-  module.hot.accept('./App', () => {
-    const newApp = require('./App');
-    render(newApp, rootNode);
+  module.hot.accept('./containers/Root', () => {
+    const newRoot = require('./containers/Root');
+    render(newRoot, rootNode);
   });
 }
 

@@ -5,7 +5,7 @@ import DemoCard from './DemoCard';
 import PropTable from './PropTable';
 import {
   DOCUMENTATION_STYLE,
-} from './styles';
+} from '../styles';
 
 type Props = {
   category: string,

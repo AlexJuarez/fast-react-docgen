@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-import demoMap from './demoMap';
+import demoMap from '../demoMap';
 import Container from 'txl/containers/Container';
-import { HEADER_TITLE_STYLES, CONTAINER_STYLES, DESCRIPTION_STYLES } from 'txl/containers/ExpandableContainer.style';
+import {
+  HEADER_TITLE_STYLES,
+  CONTAINER_STYLES,
+  DESCRIPTION_STYLES
+} from 'txl/containers/ExpandableContainer.style';
 
 type Props = {
   category: string,
@@ -25,7 +29,7 @@ class DemoCard extends Component {
       return null;
     }
 
-    return <sup><Link to={`/${category}/${title}`}>docs</Link></sup>;
+    return <sup><Link to={`/components/${category}/${title}`}>docs</Link></sup>;
   }
 
   _renderDescription() {

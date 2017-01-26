@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
+module.exports = ({ cwd }) => ({
   output: {
     path: __dirname,
     filename: 'main.bundle.js',
@@ -15,7 +15,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      txl: path.resolve(__dirname, '..', 'TXL_components', 'src'),
+      txl: path.resolve(cwd, 'src'),
     },
     extensions: ['.js', '.jsx', '.json'],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
@@ -28,7 +28,7 @@ module.exports = {
       manifest: require('./public/dll/vendor-manifest.json')
     }),
     new webpack.DllReferencePlugin({
-      context: '../TXL_components',
+      context: path.relative(__dirname, cwd),
       manifest: require('./public/dll/vendor-manifest.json')
     })
   ],
@@ -67,4 +67,4 @@ module.exports = {
     ]
   },
   cache: true
-};
+});

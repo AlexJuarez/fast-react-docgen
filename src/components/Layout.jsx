@@ -11,12 +11,13 @@ import {
   CONTENT_PANE_STYLE,
   NAVBAR_STYLE,
   PAGE_CONTAINER_STYLE,
-} from './styles';
+} from '../styles';
 
 const ACCENT_COLOR = '#FFF';
 
 type Props = {
   items: any,
+  activeNames: Array<?string>,
   children?: React.Element<*>
 };
 
