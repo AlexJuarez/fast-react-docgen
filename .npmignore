@@ -1,0 +1,4 @@
+flow-typed/
+.eslintrc.js
+.flowconfig
+.gitignore
