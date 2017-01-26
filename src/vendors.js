@@ -1,5 +1,6 @@
 require('react');
 require('react-dom');
+require('react-router');
 require('redux');
 require('superagent');
 require('redux-thunk');

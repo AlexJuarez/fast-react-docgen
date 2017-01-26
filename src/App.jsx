@@ -9,56 +9,52 @@ import StyleRoot from 'txl/styles/StyleRoot';
 
 import Layout from './Layout';
 import Demo from './Demo';
+import DemoCard from './DemoCard';
 
 type Props = {
   nav: Map<string, Array<{ title: string, file: string }>>,
   docs: any,
-  demos: Map<string, string>,
   dispatch: Dispatch,
-  params: {
-    category: ?string,
-    title: ?string
-  }
+  category: ?string,
+  title: ?string,
 }
 
 class App extends Component {
   shouldComponentUpdate(nextProps: Props, nextState: Object) {
-    const { category, title } = this.props.params;
-
-    if (category !== nextProps.params.category) {
-      return true;
-    }
-
-    if (title !== nextProps.params.title) {
-      return true;
-    }
-
     return shallowCompare(this, nextProps, nextState);
   }
 
   props: Props;
 
   _getNavItems() {
-    const {nav, params} = this.props;
+    const {nav, category} = this.props;
+    const { categories } = nav;
 
-    const items = nav.keySeq().toArray().map(group => ({
+    const items = Object.keys(categories).map(group => ({
       display: group,
-      expanded: (params.category === group),
-      items: nav.get(group).map(item => ({
+      expanded: (category === group),
+      items: categories[group].map(item => ({
         display: item.title,
         name: `${group}/${item.title}`,
         to: `/${group}/${item.title}`
       })),
       name: group
-    }));
+    }))
+      .sort((a, b) => a.name.localeCompare(b.name));
 
-    return items.sort((a, b) => a.name.localeCompare(b.name));
+    items.unshift({
+      display: 'Show All',
+      name: 'all',
+      to: '/'
+    });
+
+    return items;
   }
 
   _getFile() {
-    const { category, title } = this.props.params;
+    const { category, title } = this.props;
 
-    return this.props.nav.get(category)
+    return this.props.nav.categories[category]
       .filter(i => i.title === title)
       .pop()
       .file;
@@ -73,51 +69,70 @@ class App extends Component {
     return docs.get(file)[title];
   }
 
-  _getDemo(file) {
-    return this.props.demos.get(file);
-  }
+  _renderDemoPage() {
+    const { category, title } = this.props;
 
-  _renderDemo() {
-    const { dispatch } = this.props;
-    const { category, title } = this.props.params;
-
-    if (category != null && title != null) {
-      const file = this._getFile();
-
-      return (
-        <Demo
-          category={category}
-          docs={this._getDocs(file, title)}
-          demo={this._getDemo(file)}
-          dispatch={dispatch}
-          title={title}
-          file={file}
-        />
-      );
+    if (category == null || title == null) {
+      return null;
     }
 
-    return null;
+    const file = this._getFile();
+
+    return (
+      <Demo
+        category={category}
+        docs={this._getDocs(file, title)}
+        title={title}
+        file={file}
+      />
+    );
+  }
+
+  _renderDemos() {
+    const { nav } = this.props;
+
+    const { files } = nav;
+
+    if (this.props.category != null || this.props.title != null) {
+      return null;
+    }
+
+    return files.map(file => {
+        const { category, title, path } = file;
+        return (
+          <DemoCard
+            link={true}
+            category={category}
+            title={title}
+            file={path}
+            docs={this._getDocs(file, title)}
+          />
+        );
+      }
+    )
   }
 
   render() {
-    if (this.props.nav.isEmpty()) {
+    if (!Object.keys(this.props.nav).length) {
       return null;
     }
 
     return (
       <StyleRoot>
-        <Layout items={this._getNavItems()} activeNames={[this.props.params.title]}>
-          {this._renderDemo()}
+        <Layout items={this._getNavItems()} activeNames={[this.props.title]}>
+          {this._renderDemoPage()}
+          {this._renderDemos()}
         </Layout>
       </StyleRoot>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  demos: state.demos,
+const mapStateToProps = (state, ownProps) => ({
   docs: state.docs,
-  nav: state.nav
+  nav: state.nav,
+  category: ownProps.params.category,
+  title: ownProps.params.title,
 });
 
 export default connect(mapStateToProps)(App);

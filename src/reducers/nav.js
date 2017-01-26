@@ -1,9 +1,7 @@
-import { Map } from 'immutable';
-
-export default (state = Map(), action) => {
+export default (state = {}, action) => {
   switch(action.type) {
     case 'get nav data': {
-      return Map(action.payload);
+      return action.payload;
     }
   }
 

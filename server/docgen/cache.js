@@ -14,7 +14,7 @@ exports.set = (hash) => {
         resolveNav(items);
 
         const imports = {};
-        items.files.forEach(f => imports[f] = parseImports(f, opts));
+        items.files.forEach(f => imports[f.path] = parseImports(f.path, opts));
         resolveImports(imports);
       });
     });

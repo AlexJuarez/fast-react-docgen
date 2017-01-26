@@ -34,7 +34,12 @@ function navItems(src, opts) {
   });
 
   return {
-    files: Object.keys(demos),
+    files: Object.keys(demos)
+      .map(file => ({
+        path: file,
+        category: getCategory(file),
+        title: getTitle(file)
+      })),
     cwd: opts.cwd,
     categories
   };

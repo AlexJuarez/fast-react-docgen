@@ -1,8 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const glob = require('glob');
-
-const demos = glob.sync('../TXL_components/src/**/*.demo.jsx', { absolute: true });
 
 module.exports = {
   output: {
@@ -29,6 +26,10 @@ module.exports = {
     new webpack.DllReferencePlugin({
       context: '.',
       manifest: require('./public/dll/vendor-manifest.json')
+    }),
+    new webpack.DllReferencePlugin({
+      context: '../TXL_components',
+      manifest: require('./public/dll/vendor-manifest.json')
     })
   ],
   module: {
@@ -47,7 +48,8 @@ module.exports = {
             cacheDirectory: true,
           }
         }],
-        include: /src/
+        include: /src/,
+        exclude: [/\.demo\.jsx/, /node_modues/]
       },
       {
         test: /\.demo\.jsx/,
@@ -60,7 +62,7 @@ module.exports = {
             extends: path.resolve(__dirname, '.babelrc.demo')
           }
         }],
-        include: demos
+        exclude: [/node_modules/]
       }
     ]
   },

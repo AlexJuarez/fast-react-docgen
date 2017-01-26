@@ -16,7 +16,7 @@ const getImports = () => {
   }
 
   return {};
-}
+};
 
 const imports = getImports();
 
@@ -28,7 +28,7 @@ const getDocs = (src) => {
   }
 
   return {};
-}
+};
 
 const getCache = (key, fn) => {
   const stats = fs.statSync(key);
@@ -41,7 +41,7 @@ const getCache = (key, fn) => {
   }
 
   return imports[key].data;
-}
+};
 
 module.exports = (filePath, opts) => {
   let didUpdate = false;

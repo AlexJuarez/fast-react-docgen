@@ -11,6 +11,7 @@ module.exports = (app, config) => {
 
   compiler.plugin('done', (stats) => {
     cache.set(stats.hash);
+    log.debug(stats.toString({ colors: true }));
   });
 
   app.use(webpackDevMiddleware(compiler, {

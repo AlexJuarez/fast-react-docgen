@@ -8,14 +8,12 @@ import DevTools from '../devtools/DevTools';
 import { routerReducer } from 'react-router-redux'
 import nav from '../reducers/nav';
 import docs from '../reducers/docs';
-import demos from '../reducers/demos';
 
 export default function configureStore(): Store<*, *> {
   const reducer = combineReducers({
     routing: routerReducer,
     nav,
-    docs,
-    demos
+    docs
   });
 
   const middleware = [thunk];
