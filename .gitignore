@@ -13,6 +13,5 @@ nohup.out
 *bundle*
 .eslintcache
 .docs.cache
-src/demoMap.js
 
 public/dll/**/*
