@@ -42,6 +42,14 @@ module.exports = ({ cwd }) => ({
         }]
       },
       {
+        test: /\.css$/,
+        use: [{
+          loader: 'style-loader'
+        }, {
+          loader: 'css-loader'
+        }]
+      },
+      {
         test: /(\.jsx|\.js)?$/,
         use: [{
           loader: 'babel-loader',

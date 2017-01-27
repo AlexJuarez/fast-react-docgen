@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 
 import DemoCard from './DemoCard';
+import Highlight from './Highlight';
 import PropTable from './PropTable';
 import {
   DOCUMENTATION_STYLE,
@@ -11,7 +12,8 @@ type Props = {
   category: string,
   title: string,
   file: string,
-  docs: ?any
+  docs: ?any,
+  code: ?string,
 };
 
 export default class Demo extends Component {
@@ -27,11 +29,18 @@ export default class Demo extends Component {
     return <PropTable docs={docs} />;
   }
 
+  _renderCode() {
+    return <Highlight code={this.props.code} />;
+  }
+
+
   render() {
     return (
       <div>
         <div style={DOCUMENTATION_STYLE}>
           <DemoCard {...this.props} />
+          {this._renderCode()}
+          <div style={{ height: 20 }} />
           {this._renderProps()}
         </div>
       </div>

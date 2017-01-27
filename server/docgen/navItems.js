@@ -9,7 +9,6 @@ const getTitle = (filePath, demoExt) => path.basename(filePath).replace(demoExt,
 
 function navItems(src, { cwd, demoExt}) {
   const files = glob.sync(src, { cwd });
-  const txlSrc = path.join(cwd, 'src');
 
   const categories = {};
   const demos = {};
@@ -34,6 +33,7 @@ function navItems(src, { cwd, demoExt}) {
     files: Object.keys(demos)
       .map(file => ({
         path: file,
+        code: fs.readFileSync(file).toString(),
         category: getCategory(file),
         title: getTitle(file, demoExt)
       })),

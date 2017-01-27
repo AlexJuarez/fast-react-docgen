@@ -14,12 +14,19 @@ class DemoPage extends Component {
   }
 
   _getDocs(file, title) {
-    const { docs } = this.props;
+    const {docs} = this.props;
     if (docs.get(file) == null) {
       return {};
     }
 
     return docs.get(file)[title];
+  }
+
+  _getCode(file) {
+    return this.props.nav.files
+      .filter(({ path }) => path === file)
+      .pop()
+      .code;
   }
 
   render() {
@@ -34,6 +41,7 @@ class DemoPage extends Component {
     return (
       <Demo
         category={category}
+        code={this._getCode(file)}
         docs={this._getDocs(file, title)}
         title={title}
         file={file}
