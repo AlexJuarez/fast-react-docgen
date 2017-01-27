@@ -1,12 +1,30 @@
 const path = require('path');
 const open = require('open');
+const fs = require('fs');
 
 const Server = require('./server');
 const logger = require('./server/util/logger');
 const generateDll = require('./generateDll');
 const createDemoMap = require('./server/util/createDemoMap');
+const log = logger.create('runner');
 
-const TXL_ROOT = path.resolve('../TXL_components');
+const getTxlRoot = () => {
+  const defaultPaths = ['../TXL_components', process.cwd()];
+  const found = defaultPaths.filter(p => {
+    const dirPath = path.resolve(p);
+    return path.basename(dirPath) === 'TXL_components' &&
+      fs.existsSync(dirPath);
+  });
+
+  if (found.length) {
+    return found.pop();
+  } else {
+    log.error('TXL root path could not be found.');
+    process.exit();
+  }
+};
+
+const TXL_ROOT = getTxlRoot();
 
 const Run = (config) => {
   logger.setup(config.logLevel, true);
