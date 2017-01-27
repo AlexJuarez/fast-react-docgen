@@ -50,7 +50,7 @@ module.exports = (filePath, opts) => {
   const components = getCache(filePath, () => {
     const output = [];
     const resolver = Resolver(opts.cwd);
-    const parser = require(resolver.resolve('./docs/docgen/babylon'));
+    const parser = require('./parser/babylon');
     const j = jscodeshift.withParser(parser);
 
     const source = fs.readFileSync(filePath, { encoding: 'utf8' });
