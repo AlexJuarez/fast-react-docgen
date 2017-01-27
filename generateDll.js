@@ -5,7 +5,7 @@ const config = require('./webpack.dll');
 const log = require('./server/util/logger').create('generate-dll');
 
 module.exports = (opts = {}) => {
-  const outputPath = path.join(config.output.path, 'vendor-manifest.json');
+  const outputPath = path.resolve(__dirname, config.output.path, 'vendor-manifest.json');
 
   if (!fs.existsSync(outputPath) || opts.force) {
     log.info('generating a new vendor dll');

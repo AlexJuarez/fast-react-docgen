@@ -6,10 +6,12 @@ const docgen = require('react-docgen');
 const logger = require('../util/logger');
 const log = logger.create('parse-imports');
 
+const CACHE_PATH = path.resolve(__dirname, '..', '..', '.docs.cache');
+
 const getImports = () => {
-  if (fs.existsSync(path.resolve(__dirname, '..', '..', '.docs.cache'))) {
+  if (fs.existsSync(CACHE_PATH)) {
     try {
-      return JSON.parse(fs.readFileSync('.docs.cache'));
+      return JSON.parse(fs.readFileSync(CACHE_PATH));
     } catch (err) {
       log.debug(err.message);
     }
@@ -78,7 +80,7 @@ module.exports = (filePath, opts) => {
     });
   });
 
-  fs.writeFileSync(path.resolve(__dirname, '..', '..', '.docs.cache'), JSON.stringify(imports));
+  fs.writeFileSync(CACHE_PATH, JSON.stringify(imports));
 
   const output = {};
 

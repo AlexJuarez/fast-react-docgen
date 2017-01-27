@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = ({ cwd }) => ({
+  context: __dirname,
   output: {
     path: __dirname,
     filename: 'main.bundle.js',
@@ -25,11 +26,11 @@ module.exports = ({ cwd }) => ({
     new webpack.NamedModulesPlugin(),
     new webpack.DllReferencePlugin({
       context: '.',
-      manifest: require('./public/dll/vendor-manifest.json')
+      manifest: require(path.resolve(__dirname, './public/dll/vendor-manifest.json'))
     }),
     new webpack.DllReferencePlugin({
       context: path.relative(__dirname, cwd),
-      manifest: require('./public/dll/vendor-manifest.json')
+      manifest: require(path.resolve(__dirname,'./public/dll/vendor-manifest.json'))
     })
   ],
   module: {
