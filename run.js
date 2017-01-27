@@ -25,6 +25,7 @@ const getTxlRoot = () => {
 };
 
 const TXL_ROOT = getTxlRoot();
+log.debug(`found txl: ${TXL_ROOT}`);
 
 const Run = (config) => {
   logger.setup(config.logLevel, true);
