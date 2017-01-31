@@ -1,10 +1,10 @@
 /* eslint react/prefer-stateless-function: "off",
  react/prop-types: "off", react/no-multi-comp: "off" */
 
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-
 import Navigation from 'txl/navigation/Navigation';
+
 import { COLOR_ACCENT } from 'txl/styles/theme';
 
 class LinkTemplate extends React.Component {
@@ -15,7 +15,7 @@ class LinkTemplate extends React.Component {
       name,
       style,
       to,
-      active
+      active,
     } = this.props;
 
     if (active) {
@@ -34,25 +34,17 @@ LinkTemplate.propTypes = {
 };
 
 /** Sidebar navigation for docs. */
-class NavBar extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
-  render() {
-    return (
-      <Navigation
-        activeNames={this.props.activeNames}
-        items={this.props.items}
-        template={LinkTemplate}
-      />
-    );
-  }
-}
+const NavBar = props => (
+  <Navigation
+    activeNames={props.activeNames}
+    items={props.items}
+    template={LinkTemplate}
+  />
+);
 
 NavBar.propTypes = {
-  items: Navigation.propTypes.items,
   activeNames: Navigation.propTypes.activeNames,
+  items: Navigation.propTypes.items,
 };
 
 export default NavBar;

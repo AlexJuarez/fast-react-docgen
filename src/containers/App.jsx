@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import StyleRoot from 'txl/styles/StyleRoot';
-import HomeSolid from 'txl/icons/HomeSolid'
+import HomeSolid from 'txl/icons/HomeSolid';
 
 import Layout from '../components/Layout';
 
@@ -43,16 +42,21 @@ class App extends Component {
       items: categories[group].map(item => ({
         display: item.title,
         name: `${group}/${item.title}`,
-        to: `/components/${group}/${item.title}`
+        to: `/components/${group}/${item.title}`,
       })),
-      name: group
+      name: group,
     }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     items.unshift({
-      display: <div style={{position: 'relative'}}><span style={{position: 'absolute', left: -24}}><HomeSolid /></span>Show All</div>,
+      display: (
+        <div style={{ position: 'relative' }}>
+          <span style={{ left: -24, position: 'absolute' }}><HomeSolid /></span>
+          Show All
+        </div>
+      ),
       name: 'all',
-      to: '/'
+      to: '/',
     });
 
     return items;
@@ -75,7 +79,7 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = state => ({
   nav: state.nav,
 });
 

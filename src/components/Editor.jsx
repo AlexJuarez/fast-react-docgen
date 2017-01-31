@@ -3,7 +3,7 @@ import CodeMirror from 'codemirror';
 
 require('codemirror/mode/jsx/jsx');
 require('codemirror/lib/codemirror.css');
-require('./codemirror.css')
+require('./codemirror.css');
 
 
 type Props = {
@@ -33,16 +33,16 @@ class Editor extends Component {
 
   state: State;
 
+  componentDidMount() {
+    this.editor = CodeMirror.fromTextArea(this._textarea, this.codeMirrorConfig);
+    this.editor.on('change', this._onChange);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.code !== this.props.code) {
       this.editor.setValue(nextProps.code);
       this.setState({ code: nextProps.code });
     }
-  }
-
-  componentDidMount() {
-    this.editor = CodeMirror.fromTextArea(this._textarea, this.codeMirrorConfig);
-    this.editor.on('change', this._onChange);
   }
 
   props: Props;

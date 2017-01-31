@@ -1,8 +1,8 @@
 import { createAction } from 'redux-action';
 import request from 'superagent';
 
-export default createAction('get docs', () => {
-  return new Promise((resolve, reject) => {
+export default createAction('get docs', () =>
+  new Promise((resolve, reject) => {
     request.get('/api/imports', (err, res) => {
       if (!err) {
         resolve(res.body);
@@ -10,5 +10,5 @@ export default createAction('get docs', () => {
 
       reject(err);
     });
-  });
-});
+  })
+);

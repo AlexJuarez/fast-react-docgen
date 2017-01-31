@@ -2,6 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import type { Store } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
+
 import DevTools from '../devtools/DevTools';
 import state from '../state';
 
@@ -20,8 +21,8 @@ export default function configureStore(initialState): Store<*, *> {
     initialState,
     compose(
       getMiddleware(),
-      window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument(),
-    ),
+      window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument()
+    )
   );
 
   if (module.hot) {

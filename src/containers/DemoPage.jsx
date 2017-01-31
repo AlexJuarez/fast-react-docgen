@@ -14,7 +14,7 @@ class DemoPage extends Component {
   }
 
   _getDocs(file, title) {
-    const {docs} = this.props;
+    const { docs } = this.props;
     if (docs.get(file) == null) {
       return {};
     }
@@ -52,10 +52,10 @@ class DemoPage extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  docs: state.docs,
-  nav: state.nav,
-  modules: state.modules,
   category: ownProps.params.category,
+  docs: state.docs,
+  modules: state.modules,
+  nav: state.nav,
   title: ownProps.params.title,
 });
 

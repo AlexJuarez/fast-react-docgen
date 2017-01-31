@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-
-import demoMap from '../demoMap';
 import Container from 'txl/containers/Container';
+
 import {
   HEADER_TITLE_STYLES,
   CONTAINER_STYLES,
-  DESCRIPTION_STYLES
+  DESCRIPTION_STYLES,
 } from 'txl/containers/ExpandableContainer.style';
+
+import demoMap from '../demoMap';
 
 type Props = {
   category: string,

@@ -1,12 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-
+import debounce from 'lodash.debounce';
 import Container from 'txl/containers/Container';
 import Button from 'txl/buttons/Button';
-import GearIcon from 'txl/icons/Gear';
+import CodeIcon from 'txl/icons/Code';
+
+import executeCode from '../helpers/execute-module';
 import DemoCard from './DemoCard';
 import Editor from './Editor';
-import Highlight from './Highlight';
 import PropTable from './PropTable';
 import {
   DOCUMENTATION_STYLE,
@@ -24,7 +25,7 @@ type Props = {
 type State = {
   editMode: boolean,
   code: string,
-  demo: React.Element<*>,
+  demo: ?React.Element<*>,
 };
 
 export default class Demo extends Component {
@@ -36,27 +37,39 @@ export default class Demo extends Component {
       editMode: false,
     };
 
+    this._executeCode = debounce(this._executeCode.bind(this), 500, { maxWait: 2000 });
+    this._handleCodeChange = this._handleCodeChange.bind(this);
     this._toggleEditMode = this._toggleEditMode.bind(this);
   }
 
-  props: Props;
   state: State;
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.file != this.props.file) {
-      this.setState({ editMode: false, demo: null });
+    if (nextProps.file !== this.props.file) {
+      this.setState({ demo: null, editMode: false });
     }
   }
 
+  props: Props;
+
+  _executeCode: () => void;
+  _handleCodeChange: () => void;
+  _toggleEditMode: () => void;
+
   _toggleEditMode() {
-    if (this.state.demo != null) {
-      const c = confirm('You are about to leave Live Edit mode, the demo changes will be lost');
-      if (c) {
-        this.setState({ editMode: !this.state.editMode, demo: null });
-      }
-    }  else {
-      this.setState({ editMode: !this.state.editMode });
+    this.setState({ editMode: !this.state.editMode });
+  }
+
+  _executeCode() {
+    this.setState({ demo: executeCode(this.state.code, this.props.file, this.props.modules) });
+  }
+
+  _handleCodeChange(code: string) {
+    if (this.state.editMode) {
+      this._executeCode();
     }
+
+    this.setState({ code });
   }
 
   _renderProps() {
@@ -72,41 +85,49 @@ export default class Demo extends Component {
   _renderCode() {
     const { code, modules, file } = this.props;
 
-    let elem;
-
-    if (this.state.editMode) {
-      elem = (
+    return (
+      <Container style={{ padding: 20 }} >
         <Editor
           modules={modules}
           code={code}
           file={file}
-          onChange={(code) => { this.setState({ code })}}
+          onChange={this._handleCodeChange}
         />
-      );
-    } else {
-      elem = <Highlight code={code} />
-    }
-
-    return (
-      <Container style={{ padding: 20 }} >
-        {elem}
       </Container>
     );
   }
 
   _renderRunButton() {
-    if (!this.state.editMode) {
+    if (this.state.editMode) {
       return null;
     }
 
     return (
       <Button
+        onClick={this._executeCode}
         size="large"
-        _style={{ marginRight: 10, backgroundColor: ''}}
+        _style={{ marginRight: 10 }}
       >
         Run
       </Button>
-    )
+    );
+  }
+
+  _renderLiveEditButton() {
+    return (
+      <Button
+        variant="accent"
+        size="large"
+        onClick={this._toggleEditMode}
+      >
+        <span
+          style={{ marginRight: 5, position: 'relative', top: 2 }}
+        >
+          <CodeIcon color="#ffffff" />
+        </span>
+        {this.state.editMode ? 'Deactivate' : 'Activate'} Live Edit
+      </Button>
+    );
   }
 
   render() {
@@ -126,14 +147,7 @@ export default class Demo extends Component {
           <Container style={{ marginBottom: 20, padding: 10 }}>
             <div style={{ textAlign: 'right' }}>
               {this._renderRunButton()}
-              <Button
-                variant="accent"
-                size="large"
-                onClick={this._toggleEditMode}
-              >
-                <span style={{ position: 'relative', top: 2, marginRight: 5 }}><GearIcon color="#ffffff" /></span>
-                Toggle Live Edit
-              </Button>
+              {this._renderLiveEditButton()}
             </div>
           </Container>
           {this._renderCode()}

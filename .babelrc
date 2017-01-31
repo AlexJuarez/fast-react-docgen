@@ -8,8 +8,11 @@
     "transform-decorators",
     "syntax-decorators",
     "add-module-exports",
-    ["babel-plugin-webpack-alias", {
-      "config": "./webpack.eslint.js"
+    "transform-flow-strip-types",
+    ["module-resolver", {
+      "alias": {
+        "txl": "../TXL_components/src/"
+      }
     }]
   ],
   "parserOpts": {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import LoadingIndicator from 'txl/progress-indicators/LoadingIndicator';
+
 import DemoCard from '../components/DemoCard';
 
 class DemosPage extends Component {
@@ -19,22 +19,18 @@ class DemosPage extends Component {
     this._renderMore();
   }
 
-  componentWillUnmount() {
-    this._mounted = false;
-  }
-
   componentDidUpdate() {
     this._renderMore();
   }
 
+  componentWillUnmount() {
+    this._mounted = false;
+  }
+
   _renderMore() {
     window.requestAnimationFrame(() => {
-      if (!this._mounted) {
-        return null;
-      }
-
-      if (this.state.rendered < this.props.demos.length) {
-        this.setState({rendered: this.state.rendered + 5});
+      if (this._mounted && this.state.rendered < this.props.demos.length) {
+        this.setState({ rendered: this.state.rendered + 5 });
       }
     });
   }
@@ -63,20 +59,19 @@ class DemosPage extends Component {
       return null;
     }
 
-    const cards = demos.slice(0, this.state.rendered).map(file => {
-        const { category, title, path } = file;
-        return (
-          <DemoCard
-            key={path}
-            link={true}
-            category={category}
-            title={title}
-            file={path}
-            docs={this._getDocs(file, title)}
-          />
-        );
-      }
-    ).slice(0, this.state.rendered);
+    const cards = demos.slice(0, this.state.rendered).map((file) => {
+      const { category, title, path } = file;
+      return (
+        <DemoCard
+          key={path}
+          link
+          category={category}
+          title={title}
+          file={path}
+          docs={this._getDocs(file, title)}
+        />
+      );
+    }).slice(0, this.state.rendered);
 
     return (
       <div>
@@ -87,7 +82,7 @@ class DemosPage extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   demos: state.nav.files,
   docs: state.docs,
 });

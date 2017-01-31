@@ -1,4 +1,4 @@
-const isRelative = (filePath) => filePath.charAt(0) === '.';
+const isRelative = filePath => filePath.charAt(0) === '.';
 
 const normalizePath = (context, filePath) => {
   const out = context.split('/').filter(c => c).slice(0, -1);
@@ -19,7 +19,7 @@ const normalizePath = (context, filePath) => {
   return out.join('/');
 };
 
-const convertToTXL = (filePath) => filePath.replace(/.+TXL_components\/src/, 'txl');
+const convertToTXL = filePath => filePath.replace(/.+TXL_components\/src/, 'txl');
 
 const resolveImportName = (filePath, context) => {
   if (!isRelative(filePath)) {
@@ -31,12 +31,12 @@ const resolveImportName = (filePath, context) => {
 
 const grammer = (stack, imports, file) => {
   const top = () => stack[stack.length - 1];
-  const topTypeIs = (type) => stack.length >= 1 && top().type === type;
+  const topTypeIs = type => stack.length >= 1 && top().type === type;
 
   const pushImport = (source, dec) => {
     imports.push({
+      dec,
       source: resolveImportName(source.replace(/['|"]+/g, ''), file),
-      dec
     });
   };
 
@@ -46,7 +46,7 @@ const grammer = (stack, imports, file) => {
       const i = stack.pop();
       if (i.specifiers.length) {
         i.specifiers.push(i.data.splice(0, i.data.length).join(''));
-        i.specifiers.forEach(dec => {
+        i.specifiers.forEach((dec) => {
           pushImport(from.data.join(''), dec);
         });
       } else {
@@ -56,51 +56,6 @@ const grammer = (stack, imports, file) => {
   };
 
   return {
-    import: () => {
-      createImport();
-      stack.push({ type: 'import', data: [], depth: 0, specifiers: [], lastToken: null });
-    },
-    from: () => {
-      stack.push({ type: 'from', data: [], lastToken: null });
-    },
-    ';': createImport,
-    '{': () => {
-      if (topTypeIs('import')) {
-        top().data.push('{ ');
-        top().depth++;
-      }
-    },
-    '}': () => {
-      if (topTypeIs('import')) {
-        const t = top();
-        if (t.data[t.data.length - 1] === ', ') {
-          t.data.pop();
-        }
-        t.data.push(' }');
-        t.depth--;
-      }
-    },
-    '*': () => {},
-    'as': () => {
-      if (topTypeIs('import') && top().lastToken !== '*') {
-        top().data.push(': ');
-      }
-    },
-    ',': () => {
-      if (topTypeIs('import')) {
-        const t = top();
-        if (!t.depth) {
-          t.specifiers.push(t.data.splice(0, t.data.length).join(''));
-        } else {
-          t.data.push(', ');
-        }
-      }
-    },
-    default: (token) => {
-      if (stack.length) {
-        top().data.push(token);
-      }
-    },
     after: (token) => {
       if (topTypeIs('import')) {
         top().lastToken = token;
@@ -108,7 +63,54 @@ const grammer = (stack, imports, file) => {
     },
     cleanUp: () => {
       createImport();
-    }
+    },
+    default: (token) => {
+      if (stack.length) {
+        top().data.push(token);
+      }
+    },
+    exec: {
+      '*': () => {},
+      ',': () => {
+        if (topTypeIs('import')) {
+          const t = top();
+          if (!t.depth) {
+            t.specifiers.push(t.data.splice(0, t.data.length).join(''));
+          } else {
+            t.data.push(', ');
+          }
+        }
+      },
+      ';': createImport,
+      as: () => {
+        if (topTypeIs('import') && top().lastToken !== '*') {
+          top().data.push(': ');
+        }
+      },
+      from: () => {
+        stack.push({ data: [], lastToken: null, type: 'from' });
+      },
+      import: () => {
+        createImport();
+        stack.push({ data: [], depth: 0, lastToken: null, specifiers: [], type: 'import' });
+      },
+      '{': () => {
+        if (topTypeIs('import')) {
+          top().data.push('{ ');
+          top().depth++;
+        }
+      },
+      '}': () => {
+        if (topTypeIs('import')) {
+          const t = top();
+          if (t.data[t.data.length - 1] === ', ') {
+            t.data.pop();
+          }
+          t.data.push(' }');
+          t.depth--;
+        }
+      },
+    },
   };
 };
 
@@ -154,8 +156,9 @@ const getModuleByName = (modules, name) => {
   }
 
   throw new Error(`Could not locate module: ${name}`);
-}
+};
 
+/* global __webpack_modules__: false, __webpack_require__: false */
 const resolveModule = (modules, name) => {
   const { id } = getModuleByName(modules, name);
   const vendorId = getModuleByName(modules, 'vendor').id;
@@ -165,7 +168,7 @@ const resolveModule = (modules, name) => {
   }
 
   return __webpack_require__(vendorId)(id);
-}
+};
 
 const resolveModules = (file, code, modules) => {
   const imports = getImports(file, code);

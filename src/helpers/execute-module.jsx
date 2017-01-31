@@ -1,26 +1,28 @@
-import { transform, registerPlugin } from 'babel-standalone'
+import React from 'react';
+import { transform, registerPlugin } from 'babel-standalone';
+
 import resolveModules from './import-resolver';
 
-registerPlugin('rm-import', () => {
-  return {
+registerPlugin('rm-import', () =>
+  ({
     visitor: {
       ImportDeclaration(path) {
         return path.remove();
       },
     },
-  };
-});
+  })
+);
 
 const BABEL_OPTS = {
   parserOpts: {
     allowReturnOutsideFunction: true,
   },
+  plugins: ['rm-import'],
   presets: [
     'react',
     'es2015',
     'stage-1',
   ],
-  plugins: ['rm-import'],
 };
 
 const template = (code, decs) => (
@@ -38,7 +40,7 @@ const executeCode = (code, file, modules) => {
     const { decs, sources } = resolveModules(code, file, modules);
     const transformedCode = template(transform(code, BABEL_OPTS).code, decs);
     const fn = eval(transformedCode);
-    return () => fn.apply(null, sources);
+    return fn(...sources);
   } catch (err) {
     return <pre>{err.message}</pre>;
   }

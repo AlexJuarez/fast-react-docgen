@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
   extends: 'tune',
+  parser: 'babel-eslint',
   env: {
     browser: true,
     node: true,
@@ -22,14 +23,20 @@ module.exports = {
     }],
     'no-duplicate-imports': 'off',
     // eslint-plugin-react/require-extension takes care of this rule
-    'import/extensions': 'off'
+    'import/extensions': 'off',
+    'no-plusplus': 'off',
+    'default-case': 'off',
+    'global-require': 'off',
+    'import/no-unresolved': [2, { ignore: ['txl'] }],
+    'react/prop-types': 'off',
   },
   settings: {
     'import/resolver': {
       webpack: {
-        config: './webpack.eslint.js'
-      }
+        config: path.join(__dirname, 'webpack.eslint.js')
+      },
+      'babel-module': {}
     },
-    'babel-module': {},
+    'import/extensions': ['.js', '.jsx']
   }
 };
