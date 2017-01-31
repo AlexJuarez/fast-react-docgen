@@ -15,6 +15,7 @@ type Props = {
   file: string,
   link: boolean,
   title: string,
+  demo: ?React.Element<*>,
 };
 
 class DemoCard extends Component {
@@ -44,6 +45,12 @@ class DemoCard extends Component {
   }
 
   _renderDemo() {
+    const { demo } = this.props;
+
+    if (demo != null) {
+      return demo;
+    }
+
     const DemoFile = demoMap[this.props.file];
     return <DemoFile />;
   }

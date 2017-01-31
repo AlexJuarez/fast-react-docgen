@@ -64,7 +64,7 @@ module.exports = ({ cwd }) => ({
           },
         }],
         include: /src/,
-        exclude: [/\.demo\.jsx/, /node_modues/],
+        exclude: [/\.demo\.jsx/, /node_modues/, /\.css/],
       },
       {
         test: /\.demo\.jsx/,
