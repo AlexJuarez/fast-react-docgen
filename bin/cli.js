@@ -1,9 +1,9 @@
 #!/usr/local/bin/node
 const program = require('commander');
-const pkg = require('./package.json');
-const constants = require('./server/util/constants');
-const Run = require('./run');
-const generateDll = require('./generateDll');
+const pkg = require('./../package.json');
+const constants = require('./../server/util/constants');
+const Run = require('./../run');
+const generateDll = require('./../generateDll');
 
 program
   .command('generate:dll')
