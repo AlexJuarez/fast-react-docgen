@@ -127,8 +127,8 @@ const getImports = (code, file) => {
 
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
-    if (rules[token] != null) {
-      rules[token](token);
+    if (rules.exec[token] != null) {
+      rules.exec[token](token);
     } else {
       rules.default(token);
     }
