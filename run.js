@@ -1,19 +1,21 @@
-const path = require('path');
-const open = require('open');
 const fs = require('fs');
+const path = require('path');
+
+const open = require('open');
 
 const Server = require('./server');
 const logger = require('./server/util/logger');
 const generateDll = require('./generateDll');
 const createDemoMap = require('./server/util/createDemoMap');
+
 const log = logger.create('runner');
 
+/* eslint import/no-dynamic-require: off, consistent-return: off */
 const getTxlRoot = () => {
-  const defaultPaths = ['../TXL_components', process.cwd()];
-  const found = defaultPaths.filter(p => {
-    const dirPath = path.resolve(p);
-    return path.basename(dirPath) === 'TXL_components' &&
-      fs.existsSync(dirPath);
+  const defaultPaths = ['../TXL_components', process.cwd(), path.dirname(require.main.filename)];
+  const found = defaultPaths.filter((p) => {
+    const pkgPath = path.resolve(p, 'package.json');
+    return fs.existsSync(pkgPath) && require(pkgPath).name === 'txl-builder';
   });
 
   if (found.length) {
@@ -37,7 +39,7 @@ const Run = (config) => {
     cwd: TXL_ROOT,
     demoExt: config.demoExt,
     port: config.port,
-    showStats: config.showStats
+    showStats: config.showStats,
   });
 
   server.on('ready', () => {

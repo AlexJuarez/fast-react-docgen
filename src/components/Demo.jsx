@@ -34,7 +34,7 @@ export default class Demo extends Component {
     this.state = {
       code: props.code,
       demo: null,
-      editMode: false,
+      editMode: true,
     };
 
     this._executeCode = debounce(this._executeCode.bind(this), 500, { maxWait: 2000 });
