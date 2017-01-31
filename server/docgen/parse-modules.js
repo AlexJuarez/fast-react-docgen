@@ -1,10 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 
-const rootDir = path.resolve(__dirname, '..', '..');
-
 // format path ../TXL_components/src/[name] -> txl/[name]
-const convertToTXL = filePath => filePath.replace(/^.+TXL_components\/src/, 'txl');
+const convertToTXL = (filePath, txlRoot) => filePath.replace(path.join(txlRoot, 'src'), 'txl');
 
 const removeExt = filePath => filePath.replace(/\.jsx|\.js/, '');
 
@@ -42,16 +40,16 @@ const getName = (filePath) => {
   return path.join(name, rest);
 }
 
-const getModuleName = (filePath) => {
-  const resolveName = (fp) => fs.existsSync(fp) && getName(fp);
+const getModuleName = (filePath, cwd) => {
+  const resolveName = fp => fs.existsSync(fp) && getName(fp);
 
-  const localName = resolveName(path.resolve(rootDir, filePath));
+  const localName = resolveName(path.resolve(__dirname, '..', '..', filePath));
 
   if (localName) {
     return localName;
   }
 
-  const txlName = resolveName(path.resolve(rootDir, '..', 'TXL_components', filePath));
+  const txlName = resolveName(path.resolve(cwd, filePath));
 
   if (txlName) {
     return txlName;
@@ -60,17 +58,17 @@ const getModuleName = (filePath) => {
   return filePath;
 };
 
-const parseResource = (module) => {
+const parseResource = (module, cwd) => {
   // if module.context is empty || userRequest contains node_modules
   // the module may live inside of the vendor dll
   if (module.context == null || /node_modules/.test(module.userRequest)) {
-    return getModuleName(module.userRequest);
+    return getModuleName(module.userRequest, cwd);
   }
 
-  return convertToTXL(module.userRequest);
+  return convertToTXL(module.userRequest, cwd);
 };
 
-const resolveModuleInfo = (module) => {
+const resolveModuleInfo = (module, cwd) => {
   // the module is a system module skip it
   if (module.request == null) {
     return null;
@@ -85,15 +83,15 @@ const resolveModuleInfo = (module) => {
   }
 
   return {
-    name: parseResource(module),
-    path: convertToTXL(module.userRequest),
+    name: parseResource(module, cwd),
+    path: convertToTXL(module.userRequest, cwd),
     vendor: typeof module.id === 'number',
   };
 };
 
-module.exports = (modules) => {
+module.exports = (modules, cwd) => {
   return modules
-    .map((module) => ({ module, info: resolveModuleInfo(module) }))
+    .map(module => ({ info: resolveModuleInfo(module, cwd), module }))
     .filter(({ info }) => info != null)
     .map(({ module, info }) =>
       Object.assign({}, info, {

@@ -15,7 +15,7 @@ module.exports = (app, config) => {
 
   compiler.plugin('compilation', (compilation) => {
     compilation.plugin('after-optimize-module-ids', (modules) => {
-      cache.setModules(modules);
+      cache.setModules(modules, config);
     });
   });
 

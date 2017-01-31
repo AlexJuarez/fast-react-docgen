@@ -27,9 +27,9 @@ exports.set = (hash, { cwd, demoExt }) => {
   }
 };
 
-exports.setModules = (modules) => {
+exports.setModules = (modules, { cwd }) => {
   cache.modules = new Promise((resolve) => {
-    resolve(parseModules(modules));
+    resolve(parseModules(modules, cwd));
   });
 };
 
