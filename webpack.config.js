@@ -4,9 +4,6 @@ const path = require('path');
 
 const webpack = require('webpack');
 
-const vendorManifest = require('./public/dll/vendor-manifest.json');
-
-
 module.exports = ({ cwd }) => ({
   context: path.resolve(__dirname),
   output: {
@@ -32,11 +29,11 @@ module.exports = ({ cwd }) => ({
     new webpack.NamedModulesPlugin(),
     new webpack.DllReferencePlugin({
       context: '.',
-      manifest: vendorManifest,
+      manifest: require('./public/dll/vendor-manifest.json'),
     }),
     new webpack.DllReferencePlugin({
       context: path.relative(__dirname, cwd),
-      manifest: vendorManifest,
+      manifest: require('./public/dll/vendor-manifest.json'),
     }),
   ],
   module: {
