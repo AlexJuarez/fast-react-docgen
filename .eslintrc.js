@@ -34,8 +34,7 @@ module.exports = {
     'import/resolver': {
       webpack: {
         config: path.join(__dirname, 'webpack.eslint.js')
-      },
-      'babel-module': {}
+      }
     },
     'import/extensions': ['.js', '.jsx']
   }

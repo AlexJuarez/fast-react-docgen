@@ -8,12 +8,7 @@
     "transform-decorators",
     "syntax-decorators",
     "add-module-exports",
-    "transform-flow-strip-types",
-    ["module-resolver", {
-      "alias": {
-        "txl": "../TXL_components/src/"
-      }
-    }]
+    "transform-flow-strip-types"
   ],
   "parserOpts": {
     "allowReturnOutsideFunction": true,
