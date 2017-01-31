@@ -15,6 +15,7 @@ type Props = {
   file: string,
   docs: ?any,
   code: ?string,
+  modules: ?any,
 };
 
 export default class Demo extends Component {
@@ -31,9 +32,11 @@ export default class Demo extends Component {
   }
 
   _renderCode() {
+    const { code, modules, file } = this.props;
+
     return (
       <Container style={{ padding: '20px' }}>
-        <Editor code={this.props.code} />
+        <Editor modules={modules} code={code} file={file} />
       </Container>
     );
   }

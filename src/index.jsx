@@ -7,6 +7,7 @@ import { AppContainer } from 'react-hot-loader';
 import configureStore from './store/configureStore';
 import getNavData from './actions/nav';
 import getDocs from './actions/docs';
+import getModules from './actions/modules';
 import Root from './containers/Root';
 
 const rootNode = document.getElementById('docs');
@@ -16,6 +17,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 store.dispatch(getNavData());
 store.dispatch(getDocs());
+store.dispatch(getModules());
 
 const render = (Component, root) => {
   ReactDOM.render(

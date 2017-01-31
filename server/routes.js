@@ -20,6 +20,14 @@ module.exports = (app) => {
     });
   });
 
+  app.get('/api/modules', (req, res) => {
+    cache.get().modules.then((modules) => {
+      res.json(modules);
+    }).catch((err) => {
+      log.error(err);
+    });
+  });
+
   const indexHtml = path.resolve(__dirname, '..', 'public/index.html');
   const publicDir = path.resolve(__dirname, '..', 'public');
 

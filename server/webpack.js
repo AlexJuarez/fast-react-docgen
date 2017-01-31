@@ -13,6 +13,12 @@ module.exports = (app, config) => {
 
   log.info('webpack compiler started');
 
+  compiler.plugin('compilation', (compilation) => {
+    compilation.plugin('after-optimize-module-ids', (modules) => {
+      cache.setModules(modules);
+    });
+  });
+
   compiler.plugin('done', (stats) => {
     const start = new Date();
     cache.set(stats.hash, config);

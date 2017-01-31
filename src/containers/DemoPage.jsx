@@ -30,7 +30,7 @@ class DemoPage extends Component {
   }
 
   render() {
-    const { category, title } = this.props;
+    const { category, modules, title } = this.props;
 
     if (category == null || title == null) {
       return null;
@@ -43,6 +43,7 @@ class DemoPage extends Component {
         category={category}
         code={this._getCode(file)}
         docs={this._getDocs(file, title)}
+        modules={modules}
         title={title}
         file={file}
       />
@@ -53,6 +54,7 @@ class DemoPage extends Component {
 const mapStateToProps = (state, ownProps) => ({
   docs: state.docs,
   nav: state.nav,
+  modules: state.modules,
   category: ownProps.params.category,
   title: ownProps.params.title,
 });

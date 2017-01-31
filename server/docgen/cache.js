@@ -2,6 +2,7 @@ const path = require('path');
 
 const navItems = require('./navItems');
 const parseImports = require('./parseImports');
+const parseModules = require('./parse-modules');
 
 const cache = {};
 
@@ -24,6 +25,12 @@ exports.set = (hash, { cwd, demoExt }) => {
       });
     });
   }
+};
+
+exports.setModules = (modules) => {
+  cache.modules = new Promise((resolve) => {
+    resolve(parseModules(modules));
+  });
 };
 
 exports.get = () => cache;
