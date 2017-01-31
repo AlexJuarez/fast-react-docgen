@@ -3,7 +3,6 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  context: __dirname,
   entry: {
     vendor: [path.resolve(__dirname, 'src', 'vendors.js')],
   },

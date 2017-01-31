@@ -5,7 +5,6 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = ({ cwd }) => ({
-  context: path.resolve(__dirname),
   output: {
     path: __dirname,
     filename: 'main.bundle.js',
