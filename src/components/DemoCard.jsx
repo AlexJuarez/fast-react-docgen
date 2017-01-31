@@ -16,12 +16,13 @@ type Props = {
   link: boolean,
   title: string,
 };
-class DemoCard extends Component {
-  props: Props;
 
+class DemoCard extends Component {
   static defaultProps = {
     link: false,
   };
+
+  props: Props;
 
   _renderDocsLink() {
     const { category, link, title } = this.props;
@@ -63,7 +64,7 @@ class DemoCard extends Component {
           </div>
         </Container>
       </div>
-    )
+    );
   }
 }
 

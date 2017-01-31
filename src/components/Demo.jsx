@@ -1,8 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 
+import Container from 'txl/containers/Container';
 import DemoCard from './DemoCard';
-import Highlight from './Highlight';
+import Editor from './Editor';
 import PropTable from './PropTable';
 import {
   DOCUMENTATION_STYLE,
@@ -30,20 +31,32 @@ export default class Demo extends Component {
   }
 
   _renderCode() {
-    return <Highlight code={this.props.code} />;
+    return (
+      <Container style={{ padding: '20px' }}>
+        <Editor code={this.props.code} />
+      </Container>
+    );
   }
 
 
   render() {
+    const { category, title, file, docs, code } = this.props;
+
     return (
       <div>
         <div style={DOCUMENTATION_STYLE}>
-          <DemoCard {...this.props} />
+          <DemoCard
+            category={category}
+            title={title}
+            file={file}
+            docs={docs}
+            code={code}
+          />
           {this._renderCode()}
           <div style={{ height: 20 }} />
           {this._renderProps()}
         </div>
       </div>
-    )
+    );
   }
 }

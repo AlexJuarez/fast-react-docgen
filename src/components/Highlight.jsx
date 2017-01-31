@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Prism from 'prismjs';
-import Container from 'txl/containers/Container';
 
 require('prismjs/themes/prism.css');
 
@@ -19,11 +18,9 @@ class Hightlight extends Component {
 
   render() {
     return (
-      <Container style={{ padding: '20px' }}>
-        <code style={{ overflow: 'auto', width: '100%', display: 'block' }}>
-          <pre ref={(n) => { this._ref = n; }} />
-        </code>
-      </Container>
+      <code style={{ overflow: 'auto', width: '100%', display: 'block' }}>
+        <pre ref={(n) => { this._ref = n; }} />
+      </code>
     );
   }
 }

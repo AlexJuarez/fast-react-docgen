@@ -10,15 +10,15 @@ exports.set = (hash, { cwd, demoExt }) => {
 
   if (cache.hash == null || cache.hash !== hash) {
     const opts = { cwd, demoExt };
-    cache.navItems = new Promise(resolveNav => {
-      cache.imports = new Promise(resolveImports => {
-        const items = navItems('src/**/*' + demoExt, opts);
+    cache.navItems = new Promise((resolveNav) => {
+      cache.imports = new Promise((resolveImports) => {
+        const items = navItems(`src/**/*${demoExt}`, opts);
         resolveNav(items);
 
         const imports = {};
-        items.files.forEach(f => {
+        items.files.forEach((f) => {
           const fullPath = f.path.replace(/^txl/, TXL_SRC);
-          imports[fullPath] = parseImports(fullPath, opts)
+          imports[fullPath] = parseImports(fullPath, opts);
         });
         resolveImports(imports);
       });

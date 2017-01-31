@@ -1,5 +1,10 @@
+/* eslint sort-keys: off */
+
 const path = require('path');
+
 const webpack = require('webpack');
+
+const vendorManifest = require('./public/dll/vendor-manifest.json');
 
 module.exports = ({ cwd }) => ({
   context: __dirname,
@@ -12,7 +17,7 @@ module.exports = ({ cwd }) => ({
   entry: [
     'react-hot-loader/patch',
     'webpack-hot-middleware/client',
-    './src/index.js'
+    './src/index.jsx',
   ],
   resolve: {
     alias: {
@@ -26,12 +31,12 @@ module.exports = ({ cwd }) => ({
     new webpack.NamedModulesPlugin(),
     new webpack.DllReferencePlugin({
       context: '.',
-      manifest: require(path.resolve(__dirname, './public/dll/vendor-manifest.json'))
+      manifest: vendorManifest,
     }),
     new webpack.DllReferencePlugin({
       context: path.relative(__dirname, cwd),
-      manifest: require(path.resolve(__dirname,'./public/dll/vendor-manifest.json'))
-    })
+      manifest: vendorManifest,
+    }),
   ],
   module: {
     rules: [
@@ -39,15 +44,15 @@ module.exports = ({ cwd }) => ({
         test: /\.json$/,
         use: [{
           loader: 'json-loader',
-        }]
+        }],
       },
       {
         test: /\.css$/,
         use: [{
-          loader: 'style-loader'
+          loader: 'style-loader',
         }, {
-          loader: 'css-loader'
-        }]
+          loader: 'css-loader',
+        }],
       },
       {
         test: /(\.jsx|\.js)?$/,
@@ -55,10 +60,10 @@ module.exports = ({ cwd }) => ({
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
-          }
+          },
         }],
         include: /src/,
-        exclude: [/\.demo\.jsx/, /node_modues/]
+        exclude: [/\.demo\.jsx/, /node_modues/],
       },
       {
         test: /\.demo\.jsx/,
@@ -68,12 +73,12 @@ module.exports = ({ cwd }) => ({
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
-            extends: path.resolve(__dirname, '.babelrc.demo')
-          }
+            extends: path.resolve(__dirname, '.babelrc.demo'),
+          },
         }],
-        exclude: [/node_modules/]
-      }
-    ]
+        exclude: [/node_modules/],
+      },
+    ],
   },
-  cache: true
+  cache: true,
 });

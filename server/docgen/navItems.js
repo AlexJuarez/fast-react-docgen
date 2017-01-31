@@ -1,9 +1,9 @@
-const glob = require('glob');
-const path = require('path');
-const parseImports = require('./parseImports');
 const fs = require('fs');
+const path = require('path');
 
-const getCategory = (filePath) => filePath.split(path.sep).splice(-2).reverse().pop();
+const glob = require('glob');
+
+const getCategory = filePath => filePath.split(path.sep).splice(-2).reverse().pop();
 
 const getTitle = (filePath, demoExt) => path.basename(filePath).replace(demoExt, '');
 
@@ -30,15 +30,15 @@ function navItems(src, { cwd, demoExt}) {
   });
 
   return {
+    categories,
+    cwd,
     files: Object.keys(demos)
       .map(file => ({
-        path: file,
-        code: fs.readFileSync(file).toString(),
         category: getCategory(file),
-        title: getTitle(file, demoExt)
+        code: fs.readFileSync(file).toString(),
+        path: file,
+        title: getTitle(file, demoExt),
       })),
-    cwd: cwd,
-    categories
   };
 }
 

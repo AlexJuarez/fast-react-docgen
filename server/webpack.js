@@ -21,16 +21,16 @@ module.exports = (app, config) => {
   });
 
   app.use(webpackDevMiddleware(compiler, {
-    noInfo: true,
-    hot: true,
     historyApiFallback: true,
+    hot: true,
+    noInfo: true,
     publicPath: wpc.output.publicPath,
     stats: { colors: true },
   }));
 
   app.use(webpackHotMiddleware(compiler, {
+    heartbeat: 10 * 1000,
     log: (...args) => log.info(...args),
     path: '/__webpack_hmr',
-    heartbeat: 10 * 1000,
   }));
 };

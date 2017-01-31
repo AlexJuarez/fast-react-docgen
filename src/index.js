@@ -17,16 +17,18 @@ const history = syncHistoryWithStore(browserHistory, store);
 store.dispatch(getNavData());
 store.dispatch(getDocs());
 
-const render = (Root, root) => {
+const render = (Component, root) => {
   ReactDOM.render(
     <AppContainer>
-      <Root store={store} history={history} />
+      <Component store={store} history={history} />
     </AppContainer>,
     root
   );
 };
 
 render(Root, rootNode);
+
+/* eslint global-require: off */
 
 if (module.hot) {
   module.hot.accept('./containers/Root', () => {
