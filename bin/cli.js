@@ -1,5 +1,6 @@
 #!/usr/local/bin/node
 const program = require('commander');
+
 const pkg = require('./../package.json');
 const constants = require('./../server/util/constants');
 const Run = require('./../run');

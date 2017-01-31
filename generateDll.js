@@ -13,6 +13,6 @@ module.exports = (opts = {}) => {
       log.debug(stats.toString({ colors: true }));
     });
   } else {
-    log.info('vendor dll found.')
+    log.info('vendor dll found.');
   }
 };
