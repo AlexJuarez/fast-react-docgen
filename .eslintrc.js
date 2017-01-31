@@ -29,6 +29,7 @@ module.exports = {
       webpack: {
         config: './webpack.eslint.js'
       }
-    }
+    },
+    'babel-module': {},
   }
 };

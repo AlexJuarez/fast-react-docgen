@@ -7,7 +7,10 @@
     "transform-decorators-legacy",
     "transform-decorators",
     "syntax-decorators",
-    "add-module-exports"
+    "add-module-exports",
+    ["babel-plugin-webpack-alias", {
+      "config": "./webpack.eslint.js"
+    }]
   ],
   "parserOpts": {
     "allowReturnOutsideFunction": true,

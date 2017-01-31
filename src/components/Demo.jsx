@@ -38,7 +38,6 @@ export default class Demo extends Component {
     );
   }
 
-
   render() {
     const { category, title, file, docs, code } = this.props;
 
