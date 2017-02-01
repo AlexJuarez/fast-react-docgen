@@ -3,7 +3,6 @@ const path = require('path');
 
 const open = require('open');
 
-const Server = require('./server');
 const logger = require('./server/util/logger');
 const generateDll = require('./generateDll');
 const createDemoMap = require('./server/util/createDemoMap');
@@ -34,6 +33,8 @@ const Run = (config) => {
   log.debug(`found txl: ${TXL_ROOT}`);
 
   generateDll().then(() => {
+    const Server = require('./server');
+
     createDemoMap({ cwd: TXL_ROOT, demoExt: config.demoExt });
 
     const server = new Server({

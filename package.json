@@ -1,8 +1,8 @@
 {
   "name": "txl-docs",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "",
-  "main": "./index.js",
+  "main": "./run.js",
   "scripts": {
     "start": "node ./bin/cli.js start -l debug",
     "lint": "eslint ./src --ext=.js,.jsx",

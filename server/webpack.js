@@ -4,10 +4,11 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 
 const cache = require('./docgen/cache');
 const logger = require('./util/logger');
-const webpackConfig = require('../webpack.config');
+
 const log = logger.create('webpack');
 
 module.exports = (app, config) => {
+  const webpackConfig = require('../webpack.config');
   const wpc = webpackConfig(config);
   const compiler = webpack(wpc);
 
