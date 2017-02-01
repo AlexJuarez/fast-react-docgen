@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = {
   context: process.cwd(),
   entry: {
-    vendor: [path.join(__dirname, 'src', 'vendors.js')]
+    vendor: [path.join(__dirname, 'src', 'vendors.js')],
   },
   output: {
     filename: 'dll.[name].js',

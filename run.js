@@ -21,33 +21,34 @@ const getTxlRoot = () => {
 
   if (found.length) {
     return found.pop();
-  } else {
-    log.error('TXL root path could not be found.');
-    process.exit();
   }
-};
 
-const TXL_ROOT = getTxlRoot();
-log.debug(`found txl: ${TXL_ROOT}`);
+  log.error('TXL root path could not be found.');
+  process.exit();
+};
 
 const Run = (config) => {
   logger.setup(config.logLevel, true);
 
-  generateDll();
-  createDemoMap({ cwd: TXL_ROOT, demoExt: config.demoExt });
+  const TXL_ROOT = getTxlRoot();
+  log.debug(`found txl: ${TXL_ROOT}`);
 
-  const server = new Server({
-    cwd: TXL_ROOT,
-    demoExt: config.demoExt,
-    port: config.port,
-    showStats: config.showStats,
+  generateDll().then(() => {
+    createDemoMap({ cwd: TXL_ROOT, demoExt: config.demoExt });
+
+    const server = new Server({
+      cwd: TXL_ROOT,
+      demoExt: config.demoExt,
+      port: config.port,
+      showStats: config.showStats,
+    });
+
+    server.on('ready', () => {
+      open(`http://0.0.0.0:${config.port}`);
+    });
+
+    server.start();
   });
-
-  server.on('ready', () => {
-    open(`http://0.0.0.0:${config.port}`);
-  });
-
-  server.start();
 };
 
 module.exports = Run;
