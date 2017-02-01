@@ -8,9 +8,7 @@
     "lint": "eslint ./src --ext=.js,.jsx",
     "generate": "node ./bin/cli.js generate:dll"
   },
-  "bin": {
-    "txl-docs": "./bin/cli.js"
-  },
+  "bin": "./bin/cli.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
