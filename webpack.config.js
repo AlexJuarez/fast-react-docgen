@@ -1,8 +1,11 @@
 /* eslint sort-keys: off */
 
 const path = require('path');
+const os = require('os');
 
 const webpack = require('webpack');
+const HappyPack = require('happypack');
+const threadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 module.exports = ({ cwd }) => ({
   context: path.resolve(__dirname),
@@ -35,30 +38,48 @@ module.exports = ({ cwd }) => ({
       context: path.relative(__dirname, cwd),
       manifest: require('./public/dll/vendor-manifest.json'),
     }),
+    new HappyPack({
+      id: 'jsx',
+      loaders: ['babel-loader?cacheDirectory'],
+      threadPool,
+    }),
+    new HappyPack({
+      id: 'demo',
+      loaders: [
+        path.resolve(__dirname, './webpack/custom-loader.js'),
+        `babel-loader?cacheDirectory&extends=${path.resolve(__dirname, '.babelrc.demo')}`,
+      ],
+      threadPool,
+    }),
+    new HappyPack({
+      id: 'json',
+      loaders: ['json-loader'],
+      threadPool,
+    }),
+    new HappyPack({
+      id: 'css',
+      loaders: ['style-loader', 'css-loader'],
+      threadPool,
+    }),
   ],
   module: {
     rules: [
       {
         test: /\.json$/,
         use: [{
-          loader: 'json-loader',
+          loader: 'happypack/loader?id=json',
         }],
       },
       {
         test: /\.css$/,
         use: [{
-          loader: 'style-loader',
-        }, {
-          loader: 'css-loader',
+          loader: 'happypack/loader?id=css',
         }],
       },
       {
         test: /(\.jsx|\.js)?$/,
         use: [{
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-          },
+          loader: 'happypack/loader?id=jsx',
         }],
         include: /src/,
         exclude: [/\.demo\.jsx/, /node_modues/, /\.css/],
@@ -66,17 +87,11 @@ module.exports = ({ cwd }) => ({
       {
         test: /\.demo\.jsx/,
         use: [{
-          loader: path.resolve(__dirname, './webpack/custom-loader.js'),
-        }, {
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-            extends: path.resolve(__dirname, '.babelrc.demo'),
-          },
+          loader: 'happypack/loader?id=demo',
         }],
         exclude: [/node_modules/],
       },
     ],
   },
-  cache: true,
+  cache: true
 });

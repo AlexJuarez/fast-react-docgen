@@ -14,5 +14,6 @@ nohup.out
 .eslintcache
 .docs.cache
 src/demoMap.js
+.happypack/
 
 public/dll/**/*
