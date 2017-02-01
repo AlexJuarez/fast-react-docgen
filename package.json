@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./bin/cli.js start -l debug",
     "lint": "eslint ./src --ext=.js,.jsx",
-    "generate": "node ./bin/cli.js generate:dll",
+    "generate": "node ./bin/cli.js generate:dll"
   },
   "bin": {
     "txl-docs": "./bin/cli.js"
