@@ -99,5 +99,5 @@ module.exports = ({ cwd }) => ({
       },
     ],
   },
-  cache: true
+  cache: true,
 });
