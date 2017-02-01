@@ -1,8 +1,8 @@
 {
   "name": "txl-docs",
-  "version": "1.1.8",
+  "version": "1.1.11",
   "description": "",
-  "main": "./bin/cli.js",
+  "main": "./index.js",
   "scripts": {
     "start": "node ./bin/cli.js start -l debug",
     "lint": "eslint ./src --ext=.js,.jsx"
@@ -72,7 +72,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
-    "babel-plugin-webpack-alias": "^2.1.2",
     "eslint-config-tune": "^3.1.0",
     "eslint-plugin-flowtype": "^2.30.0",
     "eslint-plugin-import": "^2.2.0",

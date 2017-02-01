@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 // format path ../TXL_components/src/[name] -> txl/[name]
-const convertToTXL = (filePath, txlRoot) => filePath.replace(path.join(txlRoot, 'src'), 'txl');
+const convertToTXL = (filePath, txlRoot) => filePath.replace(path.resolve(txlRoot, 'src'), 'txl');
 
 const removeExt = filePath => filePath.replace(/\.jsx|\.js/, '');
 
@@ -43,16 +43,16 @@ const getName = (filePath) => {
 const getModuleName = (filePath, cwd) => {
   const resolveName = fp => fs.existsSync(fp) && getName(fp);
 
-  const localName = resolveName(path.resolve(__dirname, '..', '..', filePath));
-
-  if (localName) {
-    return localName;
-  }
-
   const txlName = resolveName(path.resolve(cwd, filePath));
 
   if (txlName) {
     return txlName;
+  }
+
+  const localName = resolveName(path.resolve(__dirname, '..', '..', filePath));
+
+  if (localName) {
+    return localName;
   }
 
   return filePath;

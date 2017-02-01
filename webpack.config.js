@@ -15,14 +15,14 @@ module.exports = ({ cwd }) => ({
   entry: [
     'react-hot-loader/patch',
     'webpack-hot-middleware/client',
-    './src/index.jsx',
+    path.resolve(__dirname, './src/index.jsx'),
   ],
   resolve: {
     alias: {
       txl: path.resolve(cwd, 'src'),
     },
     extensions: ['.js', '.jsx', '.json'],
-    modules: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules'), 'node_modules'],
+    modules: [path.resolve(__dirname, 'src'), path.resolve(process.cwd(), 'node_modules'), 'node_modules'],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

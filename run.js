@@ -12,7 +12,8 @@ const log = logger.create('runner');
 
 /* eslint import/no-dynamic-require: off, consistent-return: off */
 const getTxlRoot = () => {
-  const defaultPaths = ['../TXL_components', process.cwd(), path.dirname(require.main.filename)];
+  const defaultPaths = ['../TXL_components', path.relative(__dirname, process.cwd()), path.relative(__dirname,
+    path.dirname(require.main.filename))];
   const found = defaultPaths.filter((p) => {
     const pkgPath = path.resolve(p, 'package.json');
     return fs.existsSync(pkgPath) && require(pkgPath).name === 'txl-builder';
