@@ -7,6 +7,8 @@ const webpack = require('webpack');
 const HappyPack = require('happypack');
 const threadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
+const tempDir = path.resolve(__dirname, '.happypack');
+
 module.exports = ({ cwd }) => ({
   context: path.resolve(__dirname),
   output: {
@@ -42,6 +44,7 @@ module.exports = ({ cwd }) => ({
       id: 'jsx',
       loaders: ['babel-loader?cacheDirectory'],
       threadPool,
+      tempDir,
     }),
     new HappyPack({
       id: 'demo',
@@ -50,16 +53,19 @@ module.exports = ({ cwd }) => ({
         `babel-loader?cacheDirectory&extends=${path.resolve(__dirname, '.babelrc.demo')}`,
       ],
       threadPool,
+      tempDir,
     }),
     new HappyPack({
       id: 'json',
       loaders: ['json-loader'],
       threadPool,
+      tempDir,
     }),
     new HappyPack({
       id: 'css',
       loaders: ['style-loader', 'css-loader'],
       threadPool,
+      tempDir,
     }),
   ],
   module: {
