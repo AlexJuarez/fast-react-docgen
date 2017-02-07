@@ -24,7 +24,7 @@ type Props = {
 
 type State = {
   editMode: boolean,
-  code: string,
+  code: ?string,
   demo: ?React.Element<*>,
 };
 
@@ -46,7 +46,7 @@ export default class Demo extends Component {
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.file !== this.props.file) {
-      this.setState({ demo: null, editMode: false });
+      this.setState({ demo: null });
     }
   }
 

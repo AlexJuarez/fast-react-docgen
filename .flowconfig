@@ -2,6 +2,7 @@
 <PROJECT_ROOT>/[^/]*$
 <PROJECT_ROOT>/node_modules/fbjs/.*
 <PROJECT_ROOT>/src/test/js/.*
+<PROJECT_ROOT>/node_modules/radium/.*
 
 [include]
 node_modules/
@@ -9,6 +10,3 @@ src/
 
 [libs]
 flow-typed
-
-[options]
-module.name_mapper='txl/.+' -> '<PROJECT_ROOT>/TXLStub.js.flow'

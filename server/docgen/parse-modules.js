@@ -27,18 +27,18 @@ const trimPath = (filePath, token) => {
   const parts = filePath.split(path.sep);
 
   return path.join(...parts.slice(parts.indexOf(path.normalize(token)) + 1));
-}
+};
 
 const getName = (filePath) => {
   const pkg = getPkg(filePath);
   const { main } = pkg;
-  const { name } = pkg._requested;
+  const name = pkg.name || (pkg._requested && pkg._requested.name);
   let rest = trimPath(filePath, 'node_modules');
   rest = trimPath(rest, name);
   rest = trimPath(rest, main);
 
   return path.join(name, rest);
-}
+};
 
 const getModuleName = (filePath, cwd) => {
   const resolveName = fp => fs.existsSync(fp) && getName(fp);
@@ -89,13 +89,11 @@ const resolveModuleInfo = (module, cwd) => {
   };
 };
 
-module.exports = (modules, cwd) => {
-  return modules
-    .map(module => ({ info: resolveModuleInfo(module, cwd), module }))
-    .filter(({ info }) => info != null)
-    .map(({ module, info }) =>
-      Object.assign({}, info, {
-        id: module.id,
-        name: removeExt(info.name),
-      }));
-};
+module.exports = (modules, cwd) => modules
+  .map(module => ({ info: resolveModuleInfo(module, cwd), module }))
+  .filter(({ info }) => info != null)
+  .map(({ module, info }) =>
+    Object.assign({}, info, {
+      id: module.id,
+      name: removeExt(info.name),
+    }));

@@ -1,6 +1,6 @@
 {
   "name": "txl-docs",
-  "version": "1.2.6",
+  "version": "1.3.0",
   "description": "",
   "main": "./run.js",
   "scripts": {
@@ -78,6 +78,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.9.0",
     "flow-bin": "^0.38.0",
-    "flow-typed": "^2.0.0"
+    "flow-typed": "^2.0.0",
+    "txl": "^9.0.2"
   }
 }
