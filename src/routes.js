@@ -4,10 +4,13 @@ import DemosPage from './containers/DemosPage';
 
 const routes = {
   childRoutes: [
+    { component: DemosPage, path: 'components/:category' },
     { component: DemoPage, path: 'components/:category/:title' },
   ],
   component: App,
-  indexRoute: { component: DemosPage },
+  indexRoute: {
+    component: DemosPage,
+  },
   path: '/',
 };
 

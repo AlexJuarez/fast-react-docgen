@@ -30,16 +30,7 @@ const HEAD_CELL_STYLE = {
   fontSize: 22,
   fontWeight: 100,
   textAlign: 'left',
-};
-
-const SHORT_CELL_STYLE = {
-  ...CELL_STYLE,
-  whiteSpace: 'nowrap',
-};
-
-const LONG_CELL_STYLE = {
-  ...CELL_STYLE,
-  width: '100%',
+  width: '25%',
 };
 
 const CONTENT_PANE_STYLE = {
@@ -62,6 +53,7 @@ const PAGE_CONTAINER_STYLE = {
 };
 
 const NAVBAR_STYLE = {
+  boxSizing: 'border-box',
   flexBasis: 200,
 };
 
@@ -88,8 +80,6 @@ export {
   TABLE_STYLE,
   CELL_STYLE,
   HEAD_CELL_STYLE,
-  SHORT_CELL_STYLE,
-  LONG_CELL_STYLE,
   CONTENT_PANE_STYLE,
   CONTENT_COLUMN_STYLE,
   PAGE_CONTAINER_STYLE,

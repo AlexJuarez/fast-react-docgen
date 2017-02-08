@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import LoadingIndicator from 'txl/progress-indicators/LoadingIndicator';
+import Button from 'txl/buttons/Button';
+import { COLOR_NEUTRAL } from 'txl/styles/theme';
+import { gridUnits as gu } from 'txl/styles/helpers';
 
 import DemoCard from '../components/DemoCard';
 
@@ -8,31 +10,11 @@ class DemosPage extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this._mounted = true;
+    this._handleShowMore = this._handleShowMore.bind(this);
+
     this.state = {
-      rendered: 0,
+      rendered: 5,
     };
-  }
-
-  componentDidMount() {
-    this._mounted = true;
-    this._renderMore();
-  }
-
-  componentDidUpdate() {
-    this._renderMore();
-  }
-
-  componentWillUnmount() {
-    this._mounted = false;
-  }
-
-  _renderMore() {
-    window.requestAnimationFrame(() => {
-      if (this._mounted && this.state.rendered < this.props.demos.length) {
-        this.setState({ rendered: this.state.rendered + 5 });
-      }
-    });
   }
 
   _getDocs(file, title) {
@@ -44,21 +26,70 @@ class DemosPage extends Component {
     return docs.get(file)[title];
   }
 
-  _renderLoader() {
-    if (this.state.rendered >= this.props.demos.length) {
+  _filterCategory() {
+    const { demos, category } = this.props;
+
+    if (demos == null) {
+      return [];
+    }
+
+    if (category == null) {
+      return demos;
+    }
+
+    return demos.filter(demo => demo.category === category);
+  }
+
+  _getDemos() {
+    const { search } = this.props;
+    const demos = this._filterCategory();
+
+    if (search == null || !search.length) {
+      return demos;
+    }
+
+    const searchRE = new RegExp(search.split('').join('(.*)'), 'ig');
+    return demos.filter(demo => searchRE.test(demo.title) || searchRE.test(demo.category));
+  }
+
+  _handleShowMore() {
+    this.setState({ rendered: this.state.rendered + 5 });
+  }
+
+  _renderMoreButton(show) {
+    if (!show) {
       return null;
     }
 
-    return <LoadingIndicator />;
+    return <Button onClick={this._handleShowMore} variant="neutral">More</Button>;
+  }
+
+  _renderMore(demos) {
+    const Max = Math.min(this.state.rendered, demos.length);
+
+    if (Max === 0) {
+      return null;
+    }
+
+    return (
+      <div style={{ marginBottom: gu(2), textAlign: 'right' }}>
+        <span
+          style={{
+            color: COLOR_NEUTRAL['500'],
+            fontStyle: 'italic',
+            lineHeight: gu(5),
+            marginRight: gu(2),
+          }}
+        >
+          Showing {Max} of {demos.length}
+        </span>
+        {this._renderMoreButton(Max < demos.length)}
+      </div>
+    );
   }
 
   render() {
-    const { demos } = this.props;
-
-    if (demos == null) {
-      return null;
-    }
-
+    const demos = this._getDemos();
     const cards = demos.slice(0, this.state.rendered).map((file) => {
       const { category, title, path } = file;
       return (
@@ -75,16 +106,19 @@ class DemosPage extends Component {
 
     return (
       <div>
+        {this._renderMore(demos)}
         {cards}
-        {this._renderLoader()}
+        {this._renderMore(demos)}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
+  category: ownProps.params.category,
   demos: state.nav.files,
   docs: state.docs,
+  search: ownProps.location.query.search,
 });
 
 export default connect(mapStateToProps)(DemosPage);

@@ -6,6 +6,8 @@ const webpack = require('webpack');
 const config = require('./webpack.dll');
 const log = require('./server/util/logger').create('generate-dll');
 
+const DEV_MODE = (process.env.NODE_ENV !== 'production');
+
 const findRoot = (filePath) => {
   let root = path.dirname(filePath);
   while (root.length > 1 && !fs.existsSync(path.resolve(root, 'package.json'))) {
@@ -16,6 +18,10 @@ const findRoot = (filePath) => {
 };
 
 module.exports = (opts = {}) => {
+  if (!DEV_MODE) {
+    return Promise.resolve();
+  }
+
   const outputPath = path.resolve(__dirname, config.output.path, 'vendor-manifest.json');
   const root = findRoot(require.main.filename);
   const pkg = path.resolve(root, 'package.json');

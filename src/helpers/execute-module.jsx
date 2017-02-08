@@ -1,17 +1,6 @@
 import React from 'react';
-import { transform, registerPlugin } from 'babel-standalone';
 
 import resolveModules from './import-resolver';
-
-registerPlugin('rm-import', () =>
-  ({
-    visitor: {
-      ImportDeclaration(path) {
-        return path.remove();
-      },
-    },
-  })
-);
 
 const BABEL_OPTS = {
   parserOpts: {
@@ -35,15 +24,33 @@ const template = (code, decs) => (
 })`);
 
 /* eslint no-eval: off */
-const executeCode = (code, file, modules) => {
-  try {
-    const { decs, sources } = resolveModules(code, file, modules);
-    const transformedCode = template(transform(code, BABEL_OPTS).code, decs);
-    const fn = eval(transformedCode);
-    return fn(...sources);
-  } catch (err) {
-    return <pre>{err.message}</pre>;
-  }
-};
+
+const rmImports = () => ({
+  visitor: {
+    ImportDeclaration(path) {
+      return path.remove();
+    },
+  },
+});
+
+const executeCode = (code, file, modules) =>
+  new Promise((resolve) => {
+    require.ensure(['babel-standalone'], () => {
+      const { transform, registerPlugin, availablePlugins } = require('babel-standalone');
+
+      if (availablePlugins['rm-import'] == null) {
+        registerPlugin('rm-import', rmImports);
+      }
+
+      try {
+        const { decs, sources } = resolveModules(code, file, modules);
+        const transformedCode = template(transform(code, BABEL_OPTS).code, decs);
+        const fn = eval(transformedCode);
+        resolve(fn(...sources));
+      } catch (err) {
+        resolve(<pre>{err.message}</pre>);
+      }
+    }, 'babel-standalone');
+  });
 
 export default executeCode;

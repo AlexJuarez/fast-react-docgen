@@ -61,7 +61,9 @@ export default class Demo extends Component {
   }
 
   _executeCode() {
-    this.setState({ demo: executeCode(this.state.code, this.props.file, this.props.modules) });
+    executeCode(this.state.code, this.props.file, this.props.modules).then((result) => {
+      this.setState({ demo: result });
+    });
   }
 
   _handleCodeChange(code: string) {

@@ -15,5 +15,6 @@ nohup.out
 .docs.cache
 src/demoMap.js
 .happypack/
+public/
 
 public/dll/**/*

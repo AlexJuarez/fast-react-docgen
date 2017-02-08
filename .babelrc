@@ -1,15 +1,33 @@
 {
-  "presets": ["react", "es2015", "stage-1"],
-  "plugins": [
-    "react-hot-loader/babel",
-    "flow-react-proptypes",
-    "transform-runtime",
-    "transform-decorators-legacy",
-    "transform-decorators",
-    "syntax-decorators",
-    "add-module-exports",
-    "transform-flow-strip-types"
-  ],
+  "presets": ["react"],
+  "env": {
+    "production": {
+      "presets": [["es2015", {
+        "modules": false
+      }], "stage-1"],
+      "plugins": [
+        "flow-react-proptypes",
+        "transform-runtime",
+        "transform-decorators-legacy",
+        "transform-decorators",
+        "syntax-decorators",
+        "transform-flow-strip-types"
+      ]
+    },
+    "development": {
+      "presets": ["es2015", "stage-1"],
+      "plugins": [
+        "add-module-exports",
+        "react-hot-loader/babel",
+        "flow-react-proptypes",
+        "transform-runtime",
+        "transform-decorators-legacy",
+        "transform-decorators",
+        "syntax-decorators",
+        "transform-flow-strip-types"
+      ]
+    }
+  },
   "parserOpts": {
     "allowReturnOutsideFunction": true,
     "allowImportExportEverywhere": true

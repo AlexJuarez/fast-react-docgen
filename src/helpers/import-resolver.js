@@ -161,12 +161,12 @@ const getModuleByName = (modules, name) => {
 /* global __webpack_modules__: false, __webpack_require__: false */
 const resolveModule = (modules, name) => {
   const { id } = getModuleByName(modules, name);
-  const vendorId = getModuleByName(modules, 'vendor').id;
 
   if (__webpack_modules__[id]) {
     return __webpack_require__(id);
   }
 
+  const vendorId = getModuleByName(modules, 'vendor').id;
   return __webpack_require__(vendorId)(id);
 };
 

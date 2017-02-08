@@ -8,9 +8,9 @@ module.exports = {
     vendor: [path.join(__dirname, 'src', 'vendors.js')],
   },
   output: {
-    filename: 'dll.[name].js',
+    filename: '[name].bundle.js',
     library: '[name]',
-    path: path.join(__dirname, 'public', 'dll'),
+    path: path.join(__dirname, 'public'),
   },
   plugins: [
     new webpack.NamedModulesPlugin(),

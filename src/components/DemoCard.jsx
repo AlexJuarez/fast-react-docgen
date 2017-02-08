@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import Container from 'txl/containers/Container';
-
 import {
-  HEADER_TITLE_STYLES,
   CONTAINER_STYLES,
   DESCRIPTION_STYLES,
 } from 'txl/containers/ExpandableContainer.style';
 
 import demoMap from '../demoMap';
+import HeaderLink from './HeaderLink';
 
 type Props = {
   category: string,
   docs: ?any,
   file: string,
-  link: boolean,
   title: string,
   demo: ?React.Element<*>,
 };
@@ -25,15 +22,6 @@ class DemoCard extends Component {
   };
 
   props: Props;
-
-  _renderDocsLink() {
-    const { category, link, title } = this.props;
-    if (!link) {
-      return null;
-    }
-
-    return <sup><Link to={`/components/${category}/${title}`}>docs</Link></sup>;
-  }
 
   _renderDescription() {
     const { docs } = this.props;
@@ -57,16 +45,13 @@ class DemoCard extends Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { category, title } = this.props;
 
     return (
       <div style={{ marginBottom: 20 }}>
         <Container>
           <div style={CONTAINER_STYLES}>
-            <h2 style={HEADER_TITLE_STYLES}>
-              {title}
-              {this._renderDocsLink()}
-            </h2>
+            <HeaderLink title={title} category={category} />
             {this._renderDescription()}
             {this._renderDemo()}
           </div>

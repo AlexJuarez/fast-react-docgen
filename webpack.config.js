@@ -5,48 +5,45 @@ const os = require('os');
 
 const webpack = require('webpack');
 const HappyPack = require('happypack');
-const threadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+const WebpackHtmlPlugin = require('html-webpack-plugin');
+const Visualizer = require('webpack-visualizer-plugin');
 
+const threadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+const DEV_MODE = (process.env.NODE_ENV !== 'production');
 const tempDir = path.resolve(__dirname, '.happypack');
 
-module.exports = ({ cwd }) => ({
-  context: path.resolve(__dirname),
-  output: {
-    path: __dirname,
-    filename: 'main.bundle.js',
-    publicPath: '/public/',
-  },
-  devtool: 'eval',
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client',
-    path.resolve(__dirname, './src/index.jsx'),
-  ],
-  resolve: {
-    alias: {
-      txl: path.resolve(cwd, 'src'),
-    },
-    extensions: ['.js', '.jsx', '.json'],
-    modules: [path.resolve(__dirname, 'src'), path.resolve(process.cwd(), 'node_modules'), 'node_modules'],
-  },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+const getEntries = () => {
+  if (DEV_MODE) {
+    return [
+      'react-hot-loader/patch',
+      'webpack-hot-middleware/client',
+      path.resolve(__dirname, './src/index.jsx'),
+    ];
+  }
+
+  return [path.resolve(__dirname, './src/index.prod.jsx')];
+};
+
+const getPlugins = (cwd) => {
+  const plugins = [
+    new WebpackHtmlPlugin({
+      title: 'TXL Interactive Documentation',
+      template: 'src/index.ejs',
+    }),
     new webpack.NamedModulesPlugin(),
-    new webpack.DllReferencePlugin({
-      context: '.',
-      manifest: require('./public/dll/vendor-manifest.json'),
-    }),
-    new webpack.DllReferencePlugin({
-      context: path.relative(__dirname, cwd),
-      manifest: require('./public/dll/vendor-manifest.json'),
-    }),
     new HappyPack({
+      cacheContext: {
+        env: DEV_MODE ? 'development' : 'production',
+      },
       id: 'jsx',
       loaders: ['babel-loader?cacheDirectory'],
       threadPool,
       tempDir,
     }),
     new HappyPack({
+      cacheContext: {
+        env: DEV_MODE ? 'development' : 'production',
+      },
       id: 'demo',
       loaders: [
         path.resolve(__dirname, './webpack/custom-loader.js'),
@@ -56,18 +53,83 @@ module.exports = ({ cwd }) => ({
       tempDir,
     }),
     new HappyPack({
+      cacheContext: {
+        env: DEV_MODE ? 'development' : 'production',
+      },
       id: 'json',
       loaders: ['json-loader'],
       threadPool,
       tempDir,
     }),
     new HappyPack({
+      cacheContext: {
+        env: DEV_MODE ? 'development' : 'production',
+      },
       id: 'css',
       loaders: ['style-loader', 'css-loader'],
       threadPool,
       tempDir,
     }),
-  ],
+  ];
+
+  if (DEV_MODE) {
+    plugins.push(...[
+      new webpack.DllReferencePlugin({
+        context: '.',
+        manifest: require('./public/dll/vendor-manifest.json'),
+      }),
+      new webpack.DllReferencePlugin({
+        context: path.relative(__dirname, cwd),
+        manifest: require('./public/dll/vendor-manifest.json'),
+      }),
+      new webpack.HotModuleReplacementPlugin(),
+    ]);
+
+    return plugins;
+  }
+
+  plugins.push(...[
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: module => module.resource && module.resource.indexOf('node_modules') !== -1,
+      filename: 'vendor.bundle.js',
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        drop_console: false,
+        warnings: false,
+      },
+      minimize: true,
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }),
+    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new Visualizer(),
+  ]);
+
+  return plugins;
+};
+
+module.exports = ({ cwd }) => ({
+  context: path.resolve(__dirname),
+  output: {
+    path: path.resolve(__dirname, 'public'),
+    filename: '[name].bundle.js',
+    publicPath: '/public/',
+    chunkFilename: '[name].bundle.js',
+  },
+  devtool: 'eval',
+  entry: getEntries(),
+  resolve: {
+    alias: {
+      txl: path.resolve(cwd, 'src'),
+    },
+    extensions: ['.js', '.jsx', '.json'],
+    modules: [path.resolve(__dirname, 'src'), path.resolve(process.cwd(), 'node_modules'), 'node_modules'],
+  },
+  plugins: getPlugins(cwd),
   module: {
     rules: [
       {
@@ -83,7 +145,7 @@ module.exports = ({ cwd }) => ({
         }],
       },
       {
-        test: /(\.jsx|\.js)?$/,
+        test: /(\.jsx|\.js)$/,
         use: [{
           loader: 'happypack/loader?id=jsx',
         }],

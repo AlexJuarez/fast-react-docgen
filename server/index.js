@@ -30,15 +30,16 @@ class Server extends EventEmitter {
   }
 
   start() {
-    webpack(this._app, this._config);
-    routes(this._app);
+    webpack(this._app, this._config).then(() => {
+      routes(this._app);
 
-    this._server = http.createServer(this._app).listen(this._port);
+      this._server = http.createServer(this._app).listen(this._port);
 
-    const { port } = this._server.address();
+      const { port } = this._server.address();
 
-    log.info(`listening at localhost:${port} & 0.0.0.0:${port}`);
-    this.emit('ready');
+      log.info(`listening at localhost:${port} & 0.0.0.0:${port}`);
+      this.emit('ready');
+    });
   }
 }
 
