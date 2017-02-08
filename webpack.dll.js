@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  context: process.cwd(),
+  context: __dirname,
   entry: {
     vendor: [path.join(__dirname, 'src', 'vendors.js')],
   },
@@ -21,6 +21,6 @@ module.exports = {
     }),
   ],
   resolve: {
-    modules: [path.join(__dirname, 'src'), path.resolve(process.cwd(), 'node_modules'), path.resolve(__dirname, 'node_modules')],
+    modules: [path.join(__dirname, 'src'), path.resolve(__dirname, 'node_modules'), 'node_modules'],
   },
 };

@@ -6,7 +6,6 @@ const os = require('os');
 const webpack = require('webpack');
 const HappyPack = require('happypack');
 const WebpackHtmlPlugin = require('html-webpack-plugin');
-const Visualizer = require('webpack-visualizer-plugin');
 
 const threadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const DEV_MODE = (process.env.NODE_ENV !== 'production');
@@ -29,6 +28,7 @@ const getPlugins = (cwd) => {
     new WebpackHtmlPlugin({
       title: 'TXL Interactive Documentation',
       template: 'src/index.ejs',
+      vendor: DEV_MODE,
     }),
     new webpack.NamedModulesPlugin(),
     new HappyPack({
@@ -106,16 +106,15 @@ const getPlugins = (cwd) => {
       debug: false,
     }),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new Visualizer(),
   ]);
 
   return plugins;
 };
 
 module.exports = ({ cwd }) => ({
-  context: path.resolve(__dirname),
+  context: __dirname,
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.join(__dirname, 'public'),
     filename: '[name].bundle.js',
     publicPath: '/public/',
     chunkFilename: '[name].bundle.js',

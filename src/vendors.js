@@ -8,7 +8,6 @@ require('redux-logger');
 require('react-router-redux');
 require('redux-devtools');
 require('redux-devtools-log-monitor');
-require('babel-standalone');
 require('babel-runtime/core-js');
 require('radium');
 require('lodash');

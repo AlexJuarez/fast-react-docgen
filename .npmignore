@@ -2,4 +2,5 @@ flow-typed/
 .eslintrc.js
 .flowconfig
 .gitignore
-public/dll
+public/
+.idea/

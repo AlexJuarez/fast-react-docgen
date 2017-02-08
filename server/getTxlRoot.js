@@ -9,10 +9,10 @@ const log = logger.create('runner');
 
 const getTxlRoot = () => {
   const root = path.resolve(__dirname, '..');
-  const defaultPaths = ['../TXL_components', path.relative(root, process.cwd()), path.relative(root,
-    path.dirname(require.main.filename))];
+  const defaultPaths = ['../TXL_components', path.relative(process.cwd(), root), path.relative(
+    path.dirname(require.main.filename), root)];
   const found = defaultPaths.filter((p) => {
-    const pkgPath = path.resolve(root, p, 'package.json');
+    const pkgPath = path.resolve(p, 'package.json');
     return fs.existsSync(pkgPath) && require(pkgPath).name === 'txl-builder';
   });
 

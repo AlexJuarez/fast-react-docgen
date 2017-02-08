@@ -4,6 +4,8 @@ const express = require('express');
 const cache = require('./docgen/cache');
 const log = require('./util/logger').create('server-routes');
 
+const DEV_MODE = (process.env.NODE_ENV !== 'production');
+
 module.exports = (app) => {
   app.get('/api/nav', (req, res) => {
     cache.get().navItems.then((items) => {
@@ -34,9 +36,11 @@ module.exports = (app) => {
 
   app.use('/public', express.static(publicDir));
 
-  app.get('/', (req, res) => {
-    res.sendFile(indexHtml);
-  });
+  if (!DEV_MODE) {
+    app.get('/', (req, res) => {
+      res.sendFile(indexHtml);
+    });
+  }
 
   app.get('/components/*', (req, res) => {
     res.sendFile(indexHtml);

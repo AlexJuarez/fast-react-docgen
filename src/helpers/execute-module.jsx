@@ -35,7 +35,7 @@ const rmImports = () => ({
 
 const executeCode = (code, file, modules) =>
   new Promise((resolve) => {
-    require.ensure(['babel-standalone'], () => {
+    require.ensure([], () => {
       const { transform, registerPlugin, availablePlugins } = require('babel-standalone');
 
       if (availablePlugins['rm-import'] == null) {
