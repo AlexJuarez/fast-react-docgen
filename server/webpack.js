@@ -33,7 +33,7 @@ module.exports = (app, config) => {
       historyApiFallback: true,
       hot: true,
       noInfo: true,
-      publicPath: wpc.output.publicPath,
+      publicPath: '/',
       stats: { colors: true },
     }));
 

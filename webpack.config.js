@@ -114,10 +114,10 @@ const getPlugins = (cwd) => {
 module.exports = ({ cwd }) => ({
   context: __dirname,
   output: {
-    path: path.join(__dirname),
-    filename: path.join('public', '[name].bundle.js'),
+    path: path.join(__dirname, 'public'),
+    filename: '[name].bundle.js',
     publicPath: '/',
-    chunkFilename: path.join('public', '[name].bundle.js'),
+    chunkFilename: '[name].bundle.js',
   },
   devtool: 'eval',
   entry: getEntries(),
