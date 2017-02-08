@@ -76,11 +76,11 @@ const getPlugins = (cwd) => {
     plugins.push(...[
       new webpack.DllReferencePlugin({
         context: '.',
-        manifest: require('./public/dll/vendor-manifest.json'),
+        manifest: require('./public/vendor-manifest.json'),
       }),
       new webpack.DllReferencePlugin({
         context: path.relative(__dirname, cwd),
-        manifest: require('./public/dll/vendor-manifest.json'),
+        manifest: require('./public/vendor-manifest.json'),
       }),
       new webpack.HotModuleReplacementPlugin(),
     ]);
