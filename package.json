@@ -5,7 +5,7 @@
   "main": "./run.js",
   "scripts": {
     "build": "NODE_ENV='production' webpack -p",
-    "server": "NODE_ENV='production' node ./bin/cli.js start",
+    "server": "NODE_ENV='production' node ./server.prod.js",
     "start": "node ./bin/cli.js start -l debug",
     "lint": "eslint ./src --ext=.js,.jsx --cache",
     "generate": "node ./bin/cli.js generate:dll"

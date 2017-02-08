@@ -4,8 +4,6 @@ const express = require('express');
 const cache = require('./docgen/cache');
 const log = require('./util/logger').create('server-routes');
 
-const DEV_MODE = (process.env.NODE_ENV !== 'production');
-
 module.exports = (app) => {
   app.get('/api/nav', (req, res) => {
     cache.get().navItems.then((items) => {
@@ -33,15 +31,4 @@ module.exports = (app) => {
 
   const publicDir = path.resolve(__dirname, '..', 'public');
   app.use('/public', express.static(publicDir));
-
-  if (!DEV_MODE) {
-    const indexHtml = path.resolve(__dirname, '..', 'public/index.html');
-    app.get('/', (req, res) => {
-      res.sendFile(indexHtml);
-    });
-
-    app.get('/components/*', (req, res) => {
-      res.sendFile(indexHtml);
-    });
-  }
 };

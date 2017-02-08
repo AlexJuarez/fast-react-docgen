@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const HappyPack = require('happypack');
 
 const WebpackHtmlPlugin = require('html-webpack-plugin');
+const DocgenPlugin = require('./DocgenPlugin');
 
 const threadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const DEV_MODE = (process.env.NODE_ENV !== 'production');
@@ -37,6 +38,7 @@ const plugins = [
   ]),
   HappyPackLoader('json', ['json-loader']),
   HappyPackLoader('css', ['style-loader', 'css-loader']),
+  new DocgenPlugin(),
 ];
 
 const getPlugins = () => {

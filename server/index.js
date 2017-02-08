@@ -30,7 +30,7 @@ class Server extends EventEmitter {
   }
 
   start() {
-    webpack(this._app, this._config).then(() => {
+    webpack(this._app).then(() => {
       routes(this._app);
 
       this._server = http.createServer(this._app).listen(this._port);

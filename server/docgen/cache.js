@@ -4,32 +4,39 @@ const navItems = require('./navItems');
 const parseImports = require('./parseImports');
 const parseModules = require('./parse-modules');
 
-const cache = {};
+const TXL_ROOT = require('./../getTxlRoot')();
 
-exports.set = (hash, { cwd, demoExt }) => {
-  const TXL_SRC = path.join(cwd, 'src');
-
-  if (cache.hash == null || cache.hash !== hash) {
-    const opts = { cwd, demoExt };
-    cache.navItems = new Promise((resolveNav) => {
-      cache.imports = new Promise((resolveImports) => {
-        const items = navItems(`src/**/*${demoExt}`, opts);
-        resolveNav(items);
-
-        const imports = {};
-        items.files.forEach((f) => {
-          const fullPath = f.path.replace(/^txl/, TXL_SRC);
-          imports[fullPath] = parseImports(fullPath, opts);
-        });
-        resolveImports(imports);
-      });
-    });
-  }
+const cache = {
+  imports: Promise.resolve(),
+  modules: Promise.resolve(),
+  navItems: Promise.resolve(),
 };
 
-exports.setModules = (modules, { cwd }) => {
+exports.set = (demoExt = '.demo.jsx') => {
+  const TXL_SRC = path.join(TXL_ROOT, 'src');
+
+  const opts = { cwd: path.resolve(TXL_ROOT), demoExt };
+  cache.navItems = new Promise((resolve) => {
+    resolve(navItems(`src/**/*${demoExt}`, opts));
+  });
+
+  cache.imports = new Promise((resolve) => {
+    cache.navItems.then((items) => {
+      const imports = {};
+      items.files.forEach((f) => {
+        const fullPath = f.path.replace(/^txl/, TXL_SRC);
+        imports[fullPath] = parseImports(fullPath, opts);
+      });
+      resolve(imports);
+    });
+  });
+
+  return Promise.all([cache.navItems, cache.imports]);
+};
+
+exports.setModules = (modules) => {
   cache.modules = new Promise((resolve) => {
-    resolve(parseModules(modules, cwd));
+    resolve(parseModules(modules, TXL_ROOT));
   });
 };
 
