@@ -11,8 +11,7 @@ const DEV_MODE = (process.env.NODE_ENV !== 'production');
 
 module.exports = (app, config) => {
   const webpackConfig = require('../webpack.config');
-  const wpc = webpackConfig(config);
-  const compiler = webpack(wpc);
+  const compiler = webpack(webpackConfig);
 
   log.info('webpack compiler started');
 
@@ -29,6 +28,16 @@ module.exports = (app, config) => {
     log.debug(stats.toString({ colors: true }));
   });
 
+  const getIndex = () => {
+    const filePath = path.join(compiler.outputPath, 'index.html');
+    const fs = compiler.outputFileSystem;
+    if (fs.existsSync(filePath)) {
+      return fs.readFileSync(filePath);
+    }
+
+    return '<script>setTimeout(function(){ location.reload(); }, 500);</script>';
+  };
+
   if (DEV_MODE) {
     return new Promise((resolve) => {
       compiler.plugin('done', () => {
@@ -39,7 +48,7 @@ module.exports = (app, config) => {
         historyApiFallback: true,
         hot: true,
         noInfo: true,
-        publicPath: wpc.output.publicPath,
+        publicPath: webpackConfig.output.publicPath,
         stats: { colors: true },
       }));
 
@@ -49,16 +58,15 @@ module.exports = (app, config) => {
         path: '/__webpack_hmr',
       }));
 
-      app.get('/', (req, res, next) => {
-        const filePath = path.join(compiler.outputPath, 'index.html');
-        const fs = compiler.outputFileSystem;
-        if (!fs.existsSync(filePath)) {
-          return next();
-        }
-
-        const content = fs.readFileSync(filePath);
+      app.get('/', (req, res) => {
         res.set('content-type', 'text/html');
-        res.send(content.toString());
+        res.send(getIndex().toString());
+        res.end();
+      });
+
+      app.get('/components/*', (req, res) => {
+        res.set('content-type', 'text/html');
+        res.send(getIndex().toString());
         res.end();
       });
     });

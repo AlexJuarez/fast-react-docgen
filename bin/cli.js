@@ -4,13 +4,13 @@ const program = require('commander');
 const pkg = require('./../package.json');
 const constants = require('./../server/util/constants');
 const Run = require('./../run');
-const generateDll = require('./../generateDll');
+const generateDll = require('./../webpack/generateDll');
 
 program
   .command('generate:dll')
   .description('generates a new vendor dll')
   .action(() => {
-    generateDll({ force: true });
+    generateDll(true);
   });
 
 program

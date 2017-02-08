@@ -7,7 +7,13 @@ const log = logger.create('runner');
 
 /* eslint import/no-dynamic-require: off */
 
+let TXL_ROOT = null;
+
 const getTxlRoot = () => {
+  if (TXL_ROOT != null) {
+    return TXL_ROOT;
+  }
+
   const root = path.resolve(__dirname, '..');
   const defaultPaths = ['../TXL_components', path.relative(process.cwd(), root), path.relative(
     path.dirname(require.main.filename), root)];
@@ -17,7 +23,8 @@ const getTxlRoot = () => {
   });
 
   if (found.length) {
-    return found.pop();
+    TXL_ROOT = found.pop();
+    return TXL_ROOT;
   }
 
   log.error('TXL root path could not be found.');

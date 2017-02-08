@@ -5,7 +5,6 @@ require('codemirror/mode/jsx/jsx');
 require('codemirror/lib/codemirror.css');
 require('./codemirror.css');
 
-
 type Props = {
   code: string,
   onChange: (demo: ?React.Element<*>) => void,

@@ -33,7 +33,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       webpack: {
-        config: path.join(__dirname, 'webpack.eslint.js')
+        config: path.join(__dirname, 'webpack.config.js')
       }
     },
     'import/extensions': ['.js', '.jsx']

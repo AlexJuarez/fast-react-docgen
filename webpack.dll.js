@@ -10,14 +10,14 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     library: '[name]',
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'public', 'dll'),
   },
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.DllPlugin({
       context: '.',
       name: '[name]',
-      path: path.join(__dirname, 'public', '[name]-manifest.json'),
+      path: path.join(__dirname, 'public', 'dll', '[name]-manifest.json'),
     }),
   ],
   resolve: {

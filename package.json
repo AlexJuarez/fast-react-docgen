@@ -4,6 +4,7 @@
   "description": "",
   "main": "./run.js",
   "scripts": {
+    "build": "NODE_ENV='production' webpack -p",
     "server": "NODE_ENV='production' node ./bin/cli.js start",
     "start": "node ./bin/cli.js start -l debug",
     "lint": "eslint ./src --ext=.js,.jsx --cache",
