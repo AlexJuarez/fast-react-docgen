@@ -33,7 +33,6 @@ module.exports = (app) => {
 
   const indexHtml = path.resolve(__dirname, '..', 'public/index.html');
   const publicDir = path.resolve(__dirname, '..', 'public');
-
   app.use('/public', express.static(publicDir));
 
   if (!DEV_MODE) {
