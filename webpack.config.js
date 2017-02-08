@@ -28,6 +28,7 @@ const getPlugins = (cwd) => {
     new WebpackHtmlPlugin({
       title: 'TXL Interactive Documentation',
       template: 'src/index.ejs',
+      filename: 'index.html',
       vendor: DEV_MODE,
     }),
     new webpack.NamedModulesPlugin(),
@@ -116,7 +117,7 @@ module.exports = ({ cwd }) => ({
   output: {
     path: path.join(__dirname, 'public'),
     filename: '[name].bundle.js',
-    publicPath: '/',
+    publicPath: '/public/',
     chunkFilename: '[name].bundle.js',
   },
   devtool: 'eval',

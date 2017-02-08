@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -29,21 +30,38 @@ module.exports = (app, config) => {
   });
 
   if (DEV_MODE) {
-    app.use(webpackDevMiddleware(compiler, {
-      historyApiFallback: true,
-      hot: true,
-      noInfo: true,
-      publicPath: '/',
-      stats: { colors: true },
-    }));
+    return new Promise((resolve) => {
+      compiler.plugin('done', () => {
+        resolve();
+      });
 
-    app.use(webpackHotMiddleware(compiler, {
-      heartbeat: 10 * 1000,
-      log: (...args) => log.info(...args),
-      path: '/__webpack_hmr',
-    }));
+      app.use(webpackDevMiddleware(compiler, {
+        historyApiFallback: true,
+        hot: true,
+        noInfo: true,
+        publicPath: wpc.output.publicPath,
+        stats: { colors: true },
+      }));
 
-    return Promise.resolve();
+      app.use(webpackHotMiddleware(compiler, {
+        heartbeat: 10 * 1000,
+        log: (...args) => log.info(...args),
+        path: '/__webpack_hmr',
+      }));
+
+      app.get('/', (req, res, next) => {
+        const filePath = path.join(compiler.outputPath, 'index.html');
+        const fs = compiler.outputFileSystem;
+        if (!fs.existsSync(filePath)) {
+          return next();
+        }
+
+        const content = fs.readFileSync(filePath);
+        res.set('content-type', 'text/html');
+        res.send(content.toString());
+        res.end();
+      });
+    });
   }
 
   return new Promise((resolve) => {
