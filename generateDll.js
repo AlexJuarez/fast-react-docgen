@@ -22,7 +22,7 @@ module.exports = (opts = {}) => {
     return Promise.resolve();
   }
 
-  const outputPath = path.resolve(__dirname, config.output.path, 'vendor-manifest.json');
+  const outputPath = path.resolve(config.output.path, 'vendor-manifest.json');
   const root = findRoot(require.main.filename);
   const pkg = path.resolve(root, 'package.json');
 
