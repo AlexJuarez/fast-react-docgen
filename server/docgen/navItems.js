@@ -3,11 +3,13 @@ const path = require('path');
 
 const glob = require('glob');
 
+const convertPath = require('./convertPath');
+
 const getCategory = filePath => filePath.split(path.sep).splice(-2).reverse().pop();
 
 const getTitle = (filePath, demoExt) => path.basename(filePath).replace(demoExt, '');
 
-function navItems(src, { cwd, demoExt}) {
+function navItems(src, { cwd, demoExt }) {
   const files = glob.sync(src, { cwd });
 
   const categories = {};
@@ -15,7 +17,7 @@ function navItems(src, { cwd, demoExt}) {
 
   files.forEach((filePath) => {
     const category = getCategory(filePath);
-    const fullPath = path.resolve(cwd, filePath);
+    const fullPath = convertPath.txlPath(path.resolve(cwd, filePath));
 
     if (categories[category] == null) {
       categories[category] = [];
@@ -31,11 +33,10 @@ function navItems(src, { cwd, demoExt}) {
 
   return {
     categories,
-    cwd,
     files: Object.keys(demos)
       .map(file => ({
         category: getCategory(file),
-        code: fs.readFileSync(file).toString(),
+        code: fs.readFileSync(convertPath.fullPath(file)).toString(),
         path: file,
         title: getTitle(file, demoExt),
       })),

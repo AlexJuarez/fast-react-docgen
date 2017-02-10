@@ -3,7 +3,7 @@ const path = require('path');
 const navItems = require('./navItems');
 const parseImports = require('./parseImports');
 const parseModules = require('./parse-modules');
-
+const convertPath = require('./convertPath');
 const TXL_ROOT = require('./../getTxlRoot')();
 
 const cache = {
@@ -24,8 +24,8 @@ exports.set = (demoExt = '.demo.jsx') => {
     cache.navItems.then((items) => {
       const imports = {};
       items.files.forEach((f) => {
-        const fullPath = f.path.replace(/^txl/, TXL_SRC);
-        imports[fullPath] = parseImports(fullPath, opts);
+        const fullPath = convertPath.fullPath(f.path);
+        imports[f.path] = parseImports(fullPath, opts);
       });
       resolve(imports);
     });

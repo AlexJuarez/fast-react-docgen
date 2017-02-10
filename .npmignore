@@ -1,5 +1,7 @@
 flow-typed/
 .eslintrc.js
+.eslintcache
+.eslintignore
 .flowconfig
 .gitignore
 public/

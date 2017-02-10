@@ -1,9 +1,12 @@
-const jscodeshift = require('jscodeshift');
-const Resolver = require('./resolve-imports');
 const fs = require('fs');
 const path = require('path');
+
+const jscodeshift = require('jscodeshift');
 const docgen = require('react-docgen');
+
+const Resolver = require('./resolve-imports');
 const logger = require('../util/logger');
+
 const log = logger.create('parse-imports');
 
 const CACHE_PATH = path.resolve(__dirname, '..', '..', '.docs.cache');
@@ -36,9 +39,9 @@ const getCache = (key, fn) => {
   const stats = fs.statSync(key);
   if (imports[key] == null || imports[key].mtime < stats.mtime) {
     imports[key] = {
-      file: key,
       data: fn(),
-      mtime: stats.mtime
+      file: key,
+      mtime: stats.mtime,
     };
   }
 
@@ -46,7 +49,6 @@ const getCache = (key, fn) => {
 };
 
 module.exports = (filePath, opts) => {
-  let didUpdate = false;
   const components = getCache(filePath, () => {
     const output = [];
     const resolver = Resolver(opts.cwd);
@@ -67,15 +69,15 @@ module.exports = (filePath, opts) => {
         }
       });
 
-    didUpdate = true;
     return output;
   });
 
-  const out = components.map(c => fs.existsSync(`${c}.jsx`) ? `${c}.jsx` : `${c}.js`);
-  out.forEach(c => {
-    getCache(c, () => {
-      const src = fs.readFileSync(c, { encoding: 'utf8' });
-      didUpdate = true;
+  const componentPaths = components.map(c => (
+    fs.existsSync(`${c}.jsx`) ? `${c}.jsx` : `${c}.js`
+  ));
+  componentPaths.forEach((componentPath) => {
+    getCache(componentPath, () => {
+      const src = fs.readFileSync(componentPath, { encoding: 'utf8' });
       return getDocs(src);
     });
   });
@@ -84,7 +86,9 @@ module.exports = (filePath, opts) => {
 
   const output = {};
 
-  out.forEach(c => output[path.parse(c).name] = imports[c].data);
+  componentPaths.forEach((componentPath) => {
+    output[path.parse(componentPath).name] = imports[componentPath].data;
+  });
 
   return output;
 };

@@ -1,8 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-// format path ../TXL_components/src/[name] -> txl/[name]
-const convertToTXL = (filePath, txlRoot) => filePath.replace(path.resolve(txlRoot, 'src'), 'txl');
+const convertPath = require('./convertPath');
 
 const removeExt = filePath => filePath.replace(/\.jsx|\.js/, '');
 
@@ -65,7 +64,7 @@ const parseResource = (module, cwd) => {
     return getModuleName(module.userRequest, cwd);
   }
 
-  return convertToTXL(module.userRequest, cwd);
+  return convertPath.txlPath(module.userRequest);
 };
 
 const resolveModuleInfo = (module, cwd) => {
@@ -84,7 +83,7 @@ const resolveModuleInfo = (module, cwd) => {
 
   return {
     name: parseResource(module, cwd),
-    path: convertToTXL(module.userRequest, cwd),
+    path: convertPath.txlPath(module.userRequest, cwd),
     vendor: typeof module.id === 'number',
   };
 };

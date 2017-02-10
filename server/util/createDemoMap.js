@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const glob = require('glob');
 
+const convertPath = require('../docgen/convertPath');
 const log = require('./logger').create('demo-maps');
 
 const shouldUpdateDemoMap = (filePath, newMap) => {
@@ -17,7 +18,9 @@ const shouldUpdateDemoMap = (filePath, newMap) => {
 module.exports = ({ cwd, demoExt }) => {
   const demos = glob.sync(`${cwd}/src/**/*${demoExt}`, { absolute: true });
 
-  let output = demos.map(p => `  '${p}': require('${p}')`).join(',\n');
+  let output = demos
+    .map(p => `  '${convertPath.txlPath(p)}': require('${convertPath.txlPath(p)}')`)
+    .join(',\n');
 
   output = `module.exports = {\n${output}\n};\n`;
 
