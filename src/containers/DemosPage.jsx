@@ -24,17 +24,21 @@ class DemosPage extends Component {
   }
 
   _filterCategory() {
-    const { demos, category } = this.props;
+    const { demos, docs, category } = this.props;
 
-    if (demos == null) {
+    if (demos == null || docs == null) {
       return [];
     }
 
+    const orderedDemos = demos.sort((a, b) =>
+      docs.getIn([b.path, '_mtime']) - docs.getIn([a.path, '_mtime']));
+
     if (category == null) {
-      return demos;
+      return orderedDemos;
     }
 
-    return demos.filter(demo => demo.category === category);
+    return orderedDemos
+      .filter(demo => demo.category === category);
   }
 
   _getDemos() {

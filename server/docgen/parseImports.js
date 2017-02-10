@@ -48,34 +48,52 @@ const getCache = (key, fn) => {
   return imports[key].data;
 };
 
+const extCache = {};
+const ext = (filePath) => {
+  if (extCache[filePath]) {
+    return extCache[filePath];
+  }
+
+  const result = fs.existsSync(`${filePath}.jsx`) ? `${filePath}.jsx` : `${filePath}.js`;
+  extCache[filePath] = result;
+
+  return result;
+};
+
 module.exports = (filePath, opts) => {
-  const components = getCache(filePath, () => {
-    const output = [];
-    const resolver = Resolver(opts.cwd);
-    const parser = require('./parser/babylon');
-    const j = jscodeshift.withParser(parser);
+  const components = [];
+  const resolver = Resolver(opts.cwd);
+  const parser = require('./parser/babylon');
+  const j = jscodeshift.withParser(parser);
 
-    const source = fs.readFileSync(filePath, { encoding: 'utf8' });
+  const source = fs.readFileSync(filePath, { encoding: 'utf8' });
 
-    j(source)
-      .find(j.ImportDeclaration)
-      .forEach((p) => {
-        const name = p.value.source.value;
-        const resolvedName = resolver.resolve(name) || name;
-        const type = resolver.type(name, resolvedName);
+  let { mtime } = fs.statSync(filePath);
+  j(source)
+    .find(j.ImportDeclaration)
+    .forEach((p) => {
+      const name = p.value.source.value;
+      const resolvedName = resolver.resolve(name) || name;
+      const type = resolver.type(name, resolvedName);
+      const fullPath = resolver.isAbsolute(resolvedName) ?
+        resolvedName :
+        ext(path.resolve(path.dirname(filePath), resolvedName));
 
-        if (type === 'sibling') {
-          output.push(path.resolve(path.dirname(filePath), resolvedName));
+      if (type !== 'external') {
+        const mtime2 = fs.statSync(require.resolve(fullPath)).mtime;
+
+        if (mtime < mtime2) {
+          mtime = mtime2;
         }
-      });
+      }
 
-    return output;
-  });
+      if (type === 'sibling') {
+        components.push(fullPath);
+      }
+    });
 
-  const componentPaths = components.map(c => (
-    fs.existsSync(`${c}.jsx`) ? `${c}.jsx` : `${c}.js`
-  ));
-  componentPaths.forEach((componentPath) => {
+
+  components.forEach((componentPath) => {
     getCache(componentPath, () => {
       const src = fs.readFileSync(componentPath, { encoding: 'utf8' });
       return getDocs(src);
@@ -86,9 +104,11 @@ module.exports = (filePath, opts) => {
 
   const output = {};
 
-  componentPaths.forEach((componentPath) => {
+  components.forEach((componentPath) => {
     output[path.parse(componentPath).name] = imports[componentPath].data;
   });
+
+  output._mtime = mtime;
 
   return output;
 };
