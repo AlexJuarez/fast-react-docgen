@@ -5,6 +5,7 @@ import type { Router } from 'react-router';
 import StyleRoot from 'txl/styles/StyleRoot';
 import HomeIcon from 'txl/icons/HomeSolid';
 
+import formatTitle from '../helpers/formatTitle';
 import Layout from '../components/Layout';
 
 type File = {
@@ -46,18 +47,18 @@ class App extends Component {
     const { categories } = nav;
 
     const items = Object.keys(categories).map(group => ({
-      display: group,
+      display: formatTitle(group),
       expanded: group === category,
       items: categories[group].map(item => ({
-        display: item.title,
-        name: `${group}/${item.title}`,
+        display: formatTitle(item.title),
+        name: item.title,
         router,
         to: `/components/${group}/${item.title}`,
       })),
       name: group,
       router,
     }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort((a, b) => a.display.localeCompare(b.display));
 
     items.unshift(
       {

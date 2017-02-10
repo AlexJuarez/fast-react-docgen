@@ -7,6 +7,8 @@ import {
 } from 'txl/styles/theme';
 import { HEADER_TITLE_STYLES } from 'txl/containers/ExpandableContainer.style';
 
+import formatTitle from '../helpers/formatTitle';
+
 const HEADER_LINK = {
   ':hover': {
     color: COLOR_NEUTRAL['500'],
@@ -61,14 +63,25 @@ class HeaderLink extends Component {
             {category}
           </Link>
         </div>
-        <h2 style={HEADER_TITLE_STYLES}>
+        <h2 style={{ ...HEADER_TITLE_STYLES, marginBottom: 0, paddingTop: 0 }}>
           <span style={HEADER_LINK}>
             <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={`/components/${category}/${title}`}>
-              {title}
+              {formatTitle(title)}
               {this._renderLinkIcon()}
             </Link>
           </span>
         </h2>
+        <em
+          style={{
+            color: COLOR_NEUTRAL['400'],
+            display: 'block',
+            fontSize: '0.8rem',
+            marginLeft: 10,
+            marginTop: -2,
+          }}
+        >
+          txl/{category}/{title}
+        </em>
       </div>
     );
   }

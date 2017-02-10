@@ -12,13 +12,13 @@ const typeToString = (typeDoc) => {
   if (!typeDoc) {
     return 'not specified';
   }
-  if (typeDoc.name === 'union') {
+  if (typeDoc.name === 'union' && Array.isArray(typeDoc.value)) {
     return `oneOfType([${typeDoc.value.map(typeToString).join(', ')}])`;
   }
-  if (typeDoc.name === 'enum') {
+  if (typeDoc.name === 'enum' && Array.isArray(typeDoc.value)) {
     return `oneOf([${typeDoc.value.map(item => item.value).join(', ')}])`;
   }
-  return `${typeDoc.name}`;
+  return `${typeDoc.value || typeDoc.name}`;
 };
 
 const flowTypeToString = (typeDoc) => {
