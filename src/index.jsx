@@ -35,6 +35,10 @@ render(Root, rootNode);
 
 if (module.hot) {
   module.hot.accept('./containers/Root', () => {
+    store.dispatch(getNavData());
+    store.dispatch(getDocs());
+    store.dispatch(getModules());
+
     const newRoot = require('./containers/Root');
     render(newRoot, rootNode);
   });
