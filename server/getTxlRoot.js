@@ -33,7 +33,7 @@ const getTxlRoot = () => {
     '../TXL_components', //standard
     path.relative(process.cwd(), root), // at process
     path.relative(path.dirname(require.main.filename), root), // at execution location
-    path.relative(findTxlRoot(path.resolve(__dirname), root)), // txl-docs is in node modules
+    path.relative(findTxlRoot(path.resolve(__dirname)), root), // txl-docs is in node modules
   ];
 
   const found = defaultPaths.filter((p) => {
