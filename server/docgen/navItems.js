@@ -34,9 +34,10 @@ function navItems(src, { cwd, demoExt }) {
   return {
     categories,
     files: Object.keys(demos)
-      .map(file => ({
+      .map((file, id) => ({
         category: getCategory(file),
         code: fs.readFileSync(convertPath.fullPath(file)).toString(),
+        id,
         path: file,
         title: getTitle(file, demoExt),
       })),

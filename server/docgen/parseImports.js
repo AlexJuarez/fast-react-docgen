@@ -60,9 +60,9 @@ const ext = (filePath) => {
   return result;
 };
 
-module.exports = (filePath, opts) => {
+const getDependencies = (filePath, cwd) => {
   const components = [];
-  const resolver = Resolver(opts.cwd);
+  const resolver = Resolver(cwd);
   const parser = require('./parser/babylon');
   const j = jscodeshift.withParser(parser);
 
@@ -92,6 +92,11 @@ module.exports = (filePath, opts) => {
       }
     });
 
+  return { components, mtime };
+}
+
+module.exports = (filePath, { cwd }) => {
+  const { components, mtime } = getDependencies(filePath, cwd);
 
   components.forEach((componentPath) => {
     getCache(componentPath, () => {
@@ -108,7 +113,7 @@ module.exports = (filePath, opts) => {
     output[path.parse(componentPath).name] = imports[componentPath].data;
   });
 
-  output._mtime = mtime;
+  output._mtime = mtime.getTime();
 
   return output;
 };

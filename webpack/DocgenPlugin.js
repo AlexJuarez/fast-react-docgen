@@ -21,12 +21,14 @@ class DocgenPlugin {
         log.debug(stats.toString({ colors: true }));
         if (!DEV_MODE) {
           const cache = Cache.get();
-          Object.keys(cache).forEach((key) => {
-            cache[key].then((data) => {
-              const outputPath = path.resolve(__dirname, '..', 'public', `${key}.json`);
-              fs.outputFileSync(outputPath, JSON.stringify(data, null, ' '));
+          if (!DEV_MODE) {
+            Object.keys(cache).forEach((key) => {
+              cache[key].then((data) => {
+                const outputPath = path.resolve(__dirname, '..', 'public', `${key}.json`);
+                fs.outputFileSync(outputPath, JSON.stringify(data, null, ' '));
+              });
             });
-          });
+          }
         }
       });
     });

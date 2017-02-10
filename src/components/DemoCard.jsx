@@ -40,13 +40,18 @@ class DemoCard extends Component {
   }
 
   _renderDemo() {
-    const { demo } = this.props;
+    const { demo, file } = this.props;
+
+    if (file == null) {
+      return null;
+    }
 
     if (demo != null) {
       return demo;
     }
 
-    const DemoFile = demoMap[this.props.file];
+    const DemoFile = demoMap[file];
+
     return <DemoFile />;
   }
 

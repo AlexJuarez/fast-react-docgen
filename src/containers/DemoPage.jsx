@@ -4,29 +4,18 @@ import { connect } from 'react-redux';
 import Demo from '../components/Demo';
 
 class DemoPage extends Component {
-  _getFile() {
-    const { category, title } = this.props;
+  _getInfo() {
+    const { category, title, nav } = this.props;
 
-    return this.props.nav.categories[category]
-      .filter(i => i.title === title)
-      .pop()
-      .file;
+    return nav.files
+      .filter(i => i.title === title && i.category === category)
+      .pop();
   }
 
-  _getDocs(file, title) {
+  _getDocs(id, title) {
     const { docs } = this.props;
-    if (docs.get(file) == null) {
-      return null;
-    }
 
-    return docs.get(file).get(title);
-  }
-
-  _getCode(file) {
-    return this.props.nav.files
-      .filter(({ path }) => path === file)
-      .pop()
-      .code;
+    return docs.getIn([`${id}`, title]);
   }
 
   render() {
@@ -36,16 +25,16 @@ class DemoPage extends Component {
       return null;
     }
 
-    const file = this._getFile();
+    const { path, code, id } = this._getInfo();
 
     return (
       <Demo
         category={category}
-        code={this._getCode(file)}
-        docs={this._getDocs(file, title)}
+        code={code}
+        docs={this._getDocs(id, title)}
         modules={modules}
         title={title}
-        file={file}
+        file={path}
       />
     );
   }

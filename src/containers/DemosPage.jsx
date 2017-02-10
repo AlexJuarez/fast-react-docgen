@@ -30,8 +30,9 @@ class DemosPage extends Component {
       return [];
     }
 
-    const orderedDemos = demos.sort((a, b) =>
-      docs.getIn([b.path, '_mtime']) - docs.getIn([a.path, '_mtime']));
+    const orderedDemos = demos.sort((a, b) => {
+      return docs.getIn([`${b.id}`, '_mtime']) - docs.getIn([`${a.id}`, '_mtime']);
+    });
 
     if (category == null) {
       return orderedDemos;
@@ -93,6 +94,7 @@ class DemosPage extends Component {
     const demos = this._getDemos();
     const cards = demos.slice(0, this.state.rendered).map((file) => {
       const { category, title, path } = file;
+
       return (
         <DemoCard
           key={path}
@@ -100,7 +102,7 @@ class DemosPage extends Component {
           category={category}
           title={title}
           file={path}
-          docs={this._getDocs(path, title)}
+          docs={this._getDocs(file, title)}
         />
       );
     }).slice(0, this.state.rendered);

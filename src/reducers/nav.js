@@ -1,6 +1,5 @@
 const defaultState = {
   categories: {},
-  cwd: '',
   files: [],
 };
 

@@ -12,10 +12,9 @@ const cache = {
   navItems: Promise.resolve(),
 };
 
-exports.set = (demoExt = '.demo.jsx') => {
-  const TXL_SRC = path.join(TXL_ROOT, 'src');
-
+const set = (demoExt = '.demo.jsx') => {
   const opts = { cwd: path.resolve(TXL_ROOT), demoExt };
+
   cache.navItems = new Promise((resolve) => {
     resolve(navItems(`src/**/*${demoExt}`, opts));
   });
@@ -25,7 +24,7 @@ exports.set = (demoExt = '.demo.jsx') => {
       const imports = {};
       items.files.forEach((f) => {
         const fullPath = convertPath.fullPath(f.path);
-        imports[f.path] = parseImports(fullPath, opts);
+        imports[f.id] = parseImports(fullPath, opts);
       });
       resolve(imports);
     });
@@ -34,10 +33,16 @@ exports.set = (demoExt = '.demo.jsx') => {
   return Promise.all([cache.navItems, cache.imports]);
 };
 
-exports.setModules = (modules) => {
+const setModules = (modules) => {
   cache.modules = new Promise((resolve) => {
     resolve(parseModules(modules, TXL_ROOT));
   });
 };
 
-exports.get = () => cache;
+const get = () => cache;
+
+module.exports = {
+  set,
+  setModules,
+  get,
+};
