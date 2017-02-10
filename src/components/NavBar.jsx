@@ -37,7 +37,9 @@ class NavBar extends Component {
       };
 
       this.state.items.update(updateGroup, updateGroup);
-    } else if (this.props.search != null) {
+    }
+
+    if (search == null) {
       const updateGroup = (group) => {
         if (group.meta.get('search') != null) {
           return group.setIn(['meta', 'search'], null);
