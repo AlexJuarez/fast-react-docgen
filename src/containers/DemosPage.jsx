@@ -30,9 +30,8 @@ class DemosPage extends Component {
       return [];
     }
 
-    const orderedDemos = demos.sort((a, b) => {
-      return docs.getIn([`${b.id}`, '_mtime']) - docs.getIn([`${a.id}`, '_mtime']);
-    });
+    const orderedDemos = demos.sort((a, b) =>
+      docs.getIn([`${b.id}`, '_mtime']) - docs.getIn([`${a.id}`, '_mtime']));
 
     if (category == null) {
       return orderedDemos;
