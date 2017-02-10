@@ -28,7 +28,6 @@ type Categories = {
 type Nav = {
   files: Array<File>,
   categories: Categories,
-  cwd: string,
 };
 
 type Props = {
