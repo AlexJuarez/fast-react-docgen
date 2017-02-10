@@ -4,6 +4,7 @@ import {
   CONTAINER_STYLES,
   DESCRIPTION_STYLES,
 } from 'txl/containers/ExpandableContainer.style';
+import shallowCompare from 'shallow-compare';
 
 import demoMap from '../demoMap';
 import HeaderLink from './HeaderLink';
@@ -21,7 +22,12 @@ class DemoCard extends Component {
     link: false,
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
+
   props: Props;
+
 
   _renderDescription() {
     const { docs } = this.props;
@@ -30,7 +36,7 @@ class DemoCard extends Component {
       return null;
     }
 
-    return <div style={DESCRIPTION_STYLES}>{docs.description}</div>;
+    return <div style={DESCRIPTION_STYLES}>{docs.get('description')}</div>;
   }
 
   _renderDemo() {

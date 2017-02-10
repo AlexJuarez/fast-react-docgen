@@ -52,6 +52,7 @@ class HeaderLink extends Component {
 
     return (
       <div
+        style={{ marginBottom: 10 }}
         onMouseEnter={this._handleMouseEnter}
         onMouseLeave={this._handleMouseLeave}
       >

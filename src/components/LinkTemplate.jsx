@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import shallowCompare from 'shallow-compare';
 import { COLOR_ACCENT } from 'txl/styles/theme';
 
 const HIGHLIGHT_STYLE = {
@@ -6,6 +7,10 @@ const HIGHLIGHT_STYLE = {
 };
 
 class LinkTemplate extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
+
   render() {
     const {
       active,

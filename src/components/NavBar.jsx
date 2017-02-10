@@ -23,33 +23,24 @@ class NavBar extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { search, activeNames, expandedNames } = nextProps;
+
+    let isHighlighted = () => false;
     if (search != null) {
       const re = new RegExp(search.split('').map(t => `(${t})`).join('(.*)'), 'ig');
-
-      const updateGroup = (group) => {
-        if (re.test(group.display)) {
-          return group.setIn(['meta', 'search'], search);
-        } else if (group.meta.get('search') != null) {
-          return group.setIn(['meta', 'search'], null);
-        }
-
-        return group;
-      };
-
-      this.state.items.update(updateGroup, updateGroup);
+      isHighlighted = name => re.test(name);
     }
 
-    if (search == null) {
-      const updateGroup = (group) => {
-        if (group.meta.get('search') != null) {
-          return group.setIn(['meta', 'search'], null);
-        }
+    const updateSearch = (group) => {
+      if (isHighlighted(group.display)) {
+        return group.setIn(['meta', 'search'], search);
+      } else if (group.meta.get('search') != null) {
+        return group.setIn(['meta', 'search'], null);
+      }
 
-        return group;
-      };
+      return group;
+    };
 
-      this.state.items.update(updateGroup, updateGroup);
-    }
+    this.state.items.update(updateSearch, updateSearch);
 
     if (activeNames != null && activeNames.length) {
       this.state.items.updateActive(activeNames);

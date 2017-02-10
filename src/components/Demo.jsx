@@ -81,7 +81,7 @@ export default class Demo extends Component {
       return null;
     }
 
-    return <PropTable docs={docs} />;
+    return <PropTable docs={docs.toJS()} />;
   }
 
   _renderCode() {

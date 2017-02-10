@@ -1,9 +1,9 @@
-import { Map } from 'immutable';
+import Immutable, { Map } from 'immutable';
 
 export default (state = Map(), action) => {
   switch (action.type) {
     case 'get docs': {
-      return Map(action.payload);
+      return Immutable.fromJS(action.payload);
     }
   }
 

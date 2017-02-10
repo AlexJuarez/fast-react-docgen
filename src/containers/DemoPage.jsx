@@ -16,10 +16,10 @@ class DemoPage extends Component {
   _getDocs(file, title) {
     const { docs } = this.props;
     if (docs.get(file) == null) {
-      return {};
+      return null;
     }
 
-    return docs.get(file)[title];
+    return docs.get(file).get(title);
   }
 
   _getCode(file) {

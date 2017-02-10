@@ -19,11 +19,8 @@ class DemosPage extends Component {
 
   _getDocs(file, title) {
     const { docs } = this.props;
-    if (docs.get(file) == null) {
-      return {};
-    }
 
-    return docs.get(file)[title];
+    return docs.getIn([file, title]);
   }
 
   _filterCategory() {
@@ -99,7 +96,7 @@ class DemosPage extends Component {
           category={category}
           title={title}
           file={path}
-          docs={this._getDocs(file, title)}
+          docs={this._getDocs(path, title)}
         />
       );
     }).slice(0, this.state.rendered);
