@@ -46,13 +46,14 @@ export default class Demo extends Component {
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.file !== this.props.file) {
-      this.setState({ demo: null });
+      this._executeCode.cancel;
+      this.setState({ code: nextProps.code, demo: null });
     }
   }
 
   props: Props;
 
-  _executeCode: () => void;
+  _executeCode: any;
   _handleCodeChange: () => void;
   _toggleEditMode: () => void;
 
@@ -67,6 +68,10 @@ export default class Demo extends Component {
   }
 
   _handleCodeChange(code: string) {
+    if (code === this.state.code) {
+      return;
+    }
+
     if (this.state.editMode) {
       this._executeCode();
     }
