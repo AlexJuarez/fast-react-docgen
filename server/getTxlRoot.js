@@ -3,7 +3,7 @@ const path = require('path');
 
 const logger = require('./util/logger');
 
-const log = logger.create('runner');
+const log = logger.create('txl-root');
 
 /* eslint import/no-dynamic-require: off */
 
@@ -28,14 +28,14 @@ const getTxlRoot = () => {
     return TXL_ROOT;
   }
 
-  const root = path.resolve(__dirname, '..');
   const defaultPaths = [
-    '../TXL_components', //standard
-    path.relative(process.cwd(), root), // at process
-    path.relative(path.dirname(require.main.filename), root), // at execution location
-    path.relative(findTxlRoot(path.resolve(__dirname)), root), // txl-docs is in node modules
+    path.resolve('..', 'TXL_components'), // relative
+    process.cwd(), // at process
+    path.dirname(require.main.filename), // at execution location
+    findTxlRoot(path.resolve(__dirname)), // txl-docs is in node modules
   ];
 
+  log.debug(`Checking defaultPaths: ${defaultPaths.join(', ')}`);
   const found = defaultPaths.filter((p) => {
     const pkgPath = path.resolve(p, 'package.json');
     return fs.existsSync(pkgPath) && require(pkgPath).name === 'txl-builder';
@@ -43,11 +43,21 @@ const getTxlRoot = () => {
 
   if (found.length) {
     TXL_ROOT = found.pop();
+    log.info(`Path: ${TXL_ROOT}`);
     return TXL_ROOT;
   }
 
-  log.error('TXL root path could not be found.');
-  throw new Error('TXL root could not be found.');
+  log.error('Path could not be found.');
+  return null;
+};
+
+const relative = () => {
+  const root = path.resolve(__dirname, '..');
+  const relativePath = path.relative(root, getTxlRoot());
+
+  log.debug(`Relative: ${relativePath}`);
+  return relativePath;
 };
 
 module.exports = getTxlRoot;
+module.exports.relative = relative;

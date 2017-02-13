@@ -1,12 +1,12 @@
 const path = require('path');
 
-const TXL_ROOT = path.resolve(__dirname, '..', '..', require('../getTxlRoot')());
+const getTxlRoot = require('../getTxlRoot');
 
-console.log(TXL_ROOT);
+const TxlSrc = () => path.join(getTxlRoot(), 'src');
 
-const txlPath = filePath => filePath.replace(path.join(TXL_ROOT, 'src'), 'txl');
+const txlPath = filePath => filePath.replace(TxlSrc(), 'txl');
 
-const fullPath = filePath => filePath.replace('txl', path.join(TXL_ROOT, 'src'));
+const fullPath = filePath => filePath.replace('txl', TxlSrc());
 
 module.exports = {
   fullPath,

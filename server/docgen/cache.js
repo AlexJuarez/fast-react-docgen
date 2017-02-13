@@ -1,10 +1,8 @@
-const path = require('path');
-
 const navItems = require('./navItems');
 const parseImports = require('./parseImports');
 const parseModules = require('./parse-modules');
 const convertPath = require('./convertPath');
-const TXL_ROOT = require('./../getTxlRoot')();
+const txlRoot = require('./../getTxlRoot');
 
 const cache = {
   imports: Promise.resolve(),
@@ -13,7 +11,7 @@ const cache = {
 };
 
 const set = (demoExt = '.demo.jsx') => {
-  const opts = { cwd: path.resolve(TXL_ROOT), demoExt };
+  const opts = { cwd: txlRoot(), demoExt };
 
   cache.navItems = new Promise((resolve) => {
     resolve(navItems(`src/**/*${demoExt}`, opts));
@@ -35,14 +33,14 @@ const set = (demoExt = '.demo.jsx') => {
 
 const setModules = (modules) => {
   cache.modules = new Promise((resolve) => {
-    resolve(parseModules(modules, TXL_ROOT));
+    resolve(parseModules(modules, txlRoot()));
   });
 };
 
 const get = () => cache;
 
 module.exports = {
+  get,
   set,
   setModules,
-  get,
 };

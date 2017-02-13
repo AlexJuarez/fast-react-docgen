@@ -5,8 +5,6 @@ const generateDll = require('./webpack/generateDll');
 const createDemoMap = require('./server/util/createDemoMap');
 const getTxlRoot = require('./server/getTxlRoot');
 
-const log = logger.create('runner');
-
 const DEV_MODE = (process.env.NODE_ENV !== 'production');
 
 /* eslint import/no-dynamic-require: off, consistent-return: off */
@@ -14,7 +12,6 @@ const DEV_MODE = (process.env.NODE_ENV !== 'production');
 const Run = (config) => {
   logger.setup(config.logLevel, true);
   const TXL_ROOT = getTxlRoot();
-  log.debug(`found txl: ${TXL_ROOT}`);
 
   const Start = () => {
     const Server = require('./server');

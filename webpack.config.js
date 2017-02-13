@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const TXL_ROOT = require('./server/getTxlRoot')();
+const txlRoot = require('./server/getTxlRoot');
 
 module.exports = {
   context: __dirname,
@@ -16,7 +16,7 @@ module.exports = {
   entry: require('./webpack/entry'),
   resolve: {
     alias: {
-      txl: path.resolve(TXL_ROOT, 'src'),
+      txl: path.join(txlRoot(), 'src'),
     },
     extensions: ['.js', '.jsx', '.json'],
     modules: [path.resolve(__dirname, 'src'), path.resolve(process.cwd(), 'node_modules'), 'node_modules'],
