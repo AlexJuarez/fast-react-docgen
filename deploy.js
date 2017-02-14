@@ -1,22 +1,73 @@
 const s3 = require('s3');
 const path = require('path');
+const fs = require('fs-extra');
+const mime = require('mime');
 
-const client = s3.createClient({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+process.env.NODE_ENV = 'production';
+
+const upload = ({ awsKey, awsSecret, bucket }) => new Promise((resolve, reject) => {
+  const client = s3.createClient({
+    accessKeyId: awsKey,
+    secretAccessKey: awsSecret,
+  });
+
+  const uploader = client.uploadDir({
+    localDir: path.resolve(__dirname, 'public'),
+    s3Params: {
+      Bucket: bucket,
+    },
+    getS3Params: (localFile, stat, callback) => {
+      const s3Params = {
+        ContentType: mime.lookup(localFile, 'application/json'),
+      };
+
+      callback(null, s3Params);
+    },
+  });
+
+  uploader.on('error', (err) => {
+    reject(err);
+  });
+
+  uploader.on('end', () => {
+    console.log('upload complete');
+    resolve();
+  });
 });
 
-const uploader = client.uploadDir({
-  localDir: path.resolve(__dirname, 'public'),
-  s3Params: {
-    Bucket: 'txldocs',
-  },
+const build = () => new Promise(resolve => {
+  fs.emptyDirSync(path.resolve(__dirname, 'public'));
+
+  const compiler = require('webpack')(require('./webpack.config'));
+  compiler.run((err, stats) => {
+    resolve(stats);
+  });
 });
 
-uploader.on('error', (err) => {
-  console.log(err);
-});
+const Deploy = (opts) => {
+  const cmds = [
+    (opts.build ? () => build() : null),
+    (opts.upload ? () => upload(opts) : null)
+  ];
 
-uploader.on('end', () => {
-  console.log('done');
-});
+  const execute = (fns) => {
+    if (!fns.length) {
+      return;
+    }
+
+    const [fn, ...rest] = fns;
+
+    if (fn == null) {
+      execute(rest);
+      return;
+    }
+
+    fn().then(() => {
+      execute(rest);
+    });
+  };
+
+  execute(cmds);
+};
+
+module.exports = Deploy;
