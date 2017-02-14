@@ -1,6 +1,6 @@
 # TXL Component Browser & Docgen
 
-Inspired by [React ToolBox](http://react-toolbox.com/#/components) and [React StyleGuide Generator](https://github.com/pocotan001/react-styleguide-generator) comes the next generation of component sandboxing and collaboration. Currently targeted at TXL_components
+Inspired by [React ToolBox](http://react-toolbox.com/#/components) and [React StyleGuide Generator](https://github.com/pocotan001/react-styleguide-generator) comes the next generation of component sandboxing and collaboration. Currently targeted at [TXL_components](txl)
 
 ## Installation
 
@@ -32,3 +32,5 @@ txl-docs [start|generate:dll] [options]
 To create a component demo, create a file `[component].demo.jsx`. Then from that demo file export a valid react component and that will be the rendered demo. Make sure to create a demo file for each component in the demo, for example if both a
 
 > Note: In the legacy demos, a global return is used instead of `export default`.
+
+[txl]: https://gitlab.corp.tune.com/engineering/TXL_components
