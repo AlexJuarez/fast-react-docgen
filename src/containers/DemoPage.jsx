@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import shallowCompare from 'shallow-compare';
 
 import Demo from '../components/Demo';
 
 class DemoPage extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
+
   _getInfo() {
     const { category, title, nav } = this.props;
 
@@ -48,4 +53,14 @@ const mapStateToProps = (state, ownProps) => ({
   title: ownProps.params.title,
 });
 
-export default connect(mapStateToProps)(DemoPage);
+const demoPage = props => (
+  <DemoPage
+    category={props.category}
+    docs={props.docs}
+    modules={props.modules}
+    nav={props.nav}
+    title={props.title}
+  />
+);
+
+export default connect(mapStateToProps)(demoPage);

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import type { Router } from 'react-router';
 import StyleRoot from 'txl/styles/StyleRoot';
 import HomeIcon from 'txl/icons/HomeSolid';
+import shallowCompare from 'shallow-compare';
 
 import formatTitle from '../helpers/formatTitle';
 import Layout from '../components/Layout';
@@ -32,17 +33,21 @@ type Nav = {
 
 type Props = {
   nav: Nav,
-  params: Object,
+  title: ?string,
+  category: ?string,
   router: Router,
   children: React.Element<*>,
 };
 
 class App extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
+
   props: Props;
 
   _getNavItems() {
-    const { nav, params, router } = this.props;
-    const { category } = params;
+    const { nav, category, router } = this.props;
     const { categories } = nav;
 
     const items = Object.keys(categories).map(group => ({
@@ -77,7 +82,7 @@ class App extends Component {
   }
 
   render() {
-    const { nav, children, search, router } = this.props;
+    const { nav, children, router } = this.props;
 
     if (!Object.keys(nav.files).length) {
       return null;
@@ -86,10 +91,9 @@ class App extends Component {
     return (
       <StyleRoot>
         <Layout
-          search={search}
           items={this._getNavItems()}
-          activeNames={[this.props.params.title]}
-          expandedNames={[this.props.params.category]}
+          title={this.props.title}
+          category={this.props.category}
           router={router}
         >
           {children}
@@ -100,8 +104,18 @@ class App extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  category: ownProps.params.category,
   nav: state.nav,
-  search: ownProps.location.query.search,
+  title: ownProps.params.title,
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(props => (
+  <App
+    router={props.router}
+    nav={props.nav}
+    category={props.category}
+    title={props.title}
+  >
+    {props.children}
+  </App>
+));

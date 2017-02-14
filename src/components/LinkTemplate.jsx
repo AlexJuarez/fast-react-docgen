@@ -18,23 +18,25 @@ class LinkTemplate extends React.Component {
       router,
       style,
       to,
+      meta,
     } = this.props;
 
     if (active) {
       style.backgroundColor = COLOR_ACCENT['500'];
     }
 
-    const highlight = (name, r) => {
-      if (typeof name !== 'string' || r == null) {
+    const highlight = (name) => {
+      if (typeof name !== 'string' || meta.get('search') == null) {
         return name;
       }
 
-      const { query } = r.getCurrentLocation();
-      if (query.search == null || !query.search.length) {
-        return name;
-      }
-
-      const re = new RegExp(query.search.split('').map(t => `(${t})`).join('(.*)'), 'ig');
+      const search = meta.get('search');
+      const re = new RegExp(search
+        .split('')
+        .map(t => `([${t}])`)
+        .join('(.*?)'),
+        'i'
+      );
       const matches = re.exec(name);
       if (matches == null) {
         return name;
@@ -42,7 +44,7 @@ class LinkTemplate extends React.Component {
       const [match, ...rest] = matches;
       const highlights = rest.map((v, i) => {
         if (i % 2 === 0) {
-          return <span key={i} style={HIGHLIGHT_STYLE}>{v}</span>;
+          return <span key={i + v} style={HIGHLIGHT_STYLE}>{v}</span>;
         }
 
         return v;
@@ -69,7 +71,7 @@ class LinkTemplate extends React.Component {
 
     return (
       <span {...{ name, onClick, style }}>
-        {highlight(display, router)}
+        {highlight(display)}
       </span>
     );
   }

@@ -57,7 +57,12 @@ class DemosPage extends Component {
       return demos;
     }
 
-    const searchRE = new RegExp(search.split('').join('(.*)'), 'ig');
+    const searchRE = new RegExp(search
+        .split('')
+        .map(t => `[${t}]`)
+        .join('(.*?)'),
+      'i'
+    );
     return demos.filter(demo => searchRE.test(demo.title) || searchRE.test(demo.category));
   }
 
