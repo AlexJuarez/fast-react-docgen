@@ -35,8 +35,6 @@ program
   .option('-i, --key-id [id]', 'The AWS access key id', process.env.AWS_ACCESS_KEY_ID)
   .option('-s, --secret-key [id]', 'The AWS secret access key id', process.env.AWS_SECRET_ACCESS_KEY)
   .action((options) => {
-    console.log(options.build, options.upload);
-
     Deploy({
       awsKey: options.keyId,
       awsSecret: options.secretKey,
