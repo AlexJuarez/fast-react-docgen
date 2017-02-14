@@ -46,16 +46,12 @@ export default class Demo extends Component {
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.file !== this.props.file) {
-      this._executeCode.cancel;
+      this._executeCode.cancel();
       this.setState({ code: nextProps.code, demo: null });
     }
   }
 
   props: Props;
-
-  _executeCode: any;
-  _handleCodeChange: () => void;
-  _toggleEditMode: () => void;
 
   _toggleEditMode() {
     this.setState({ editMode: !this.state.editMode });
