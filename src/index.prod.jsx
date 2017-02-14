@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { browserHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 
 import configureStore from './store/configureStore';
 import getNavData from './actions/nav';
@@ -13,7 +13,7 @@ const rootNode = document.getElementById('docs');
 
 const store = configureStore();
 
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(hashHistory, store);
 
 store.dispatch(getNavData());
 store.dispatch(getDocs());

@@ -67,6 +67,7 @@
     "redux-devtools-log-monitor": "^1.2.0",
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.2.0",
+    "s3": "^4.4.0",
     "shallow-compare": "^1.2.0",
     "style-loader": "^0.13.1",
     "superagent": "^3.3.2",

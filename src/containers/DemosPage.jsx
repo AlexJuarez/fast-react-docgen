@@ -30,8 +30,16 @@ class DemosPage extends Component {
       return [];
     }
 
-    const orderedDemos = demos.sort((a, b) =>
-      docs.getIn([`${b.id}`, '_mtime']) - docs.getIn([`${a.id}`, '_mtime']));
+    const orderedDemos = demos.sort((a, b) => {
+      const mtimeA = docs.getIn([`${a.id}`, '_mtime']);
+      const mtimeB = docs.getIn([`${b.id}`, '_mtime']);
+
+      if (mtimeA === mtimeB) {
+        return a.title.localeCompare(b.title);
+      }
+
+      return mtimeB - mtimeA;
+    });
 
     if (category == null) {
       return orderedDemos;

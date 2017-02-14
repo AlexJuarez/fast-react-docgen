@@ -24,7 +24,15 @@ class DocgenPlugin {
           if (!DEV_MODE) {
             Object.keys(cache).forEach((key) => {
               cache[key].then((data) => {
-                const outputPath = path.resolve(__dirname, '..', 'public', `${key}.json`);
+                const mapKey = (k) => {
+                  if (k === 'navItems') {
+                    return 'nav';
+                  }
+
+                  return k;
+                };
+
+                const outputPath = path.resolve(__dirname, '..', 'public', 'api', `${mapKey(key)}`);
                 fs.outputFileSync(outputPath, JSON.stringify(data, null, ' '));
               });
             });

@@ -4,13 +4,18 @@ const path = require('path');
 
 const txlRoot = require('./server/getTxlRoot');
 
+const DEV_MODE = (process.env.NODE_ENV !== 'production');
+
+const fileName = DEV_MODE ? '[name].bundle.js' : 'js/[name].bundle.js';
+const publicPath = DEV_MODE ? '/public/' : '';
+
 module.exports = {
   context: __dirname,
   output: {
     path: path.join(__dirname, 'public'),
-    filename: '[name].bundle.js',
-    publicPath: '/public/',
-    chunkFilename: '[name].bundle.js',
+    filename: fileName,
+    publicPath: publicPath,
+    chunkFilename: fileName,
   },
   devtool: 'eval',
   entry: require('./webpack/entry'),

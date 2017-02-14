@@ -2,9 +2,9 @@ const webpack = require('webpack');
 
 const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
+    filename: 'js/vendor.bundle.js',
     minChunks: module => module.resource && module.resource.indexOf('node_modules') !== -1,
-    filename: 'vendor.bundle.js',
+    name: 'vendor',
   }),
   new webpack.optimize.UglifyJsPlugin({
     compress: {
@@ -14,8 +14,8 @@ const plugins = [
     minimize: true,
   }),
   new webpack.LoaderOptionsPlugin({
-    minimize: true,
     debug: false,
+    minimize: true,
   }),
   new webpack.EnvironmentPlugin(['NODE_ENV']),
 ];
