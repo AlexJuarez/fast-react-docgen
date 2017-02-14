@@ -14,7 +14,7 @@ npm install txl-docs -D
 
 usage
 ```shell
-txl-docs [start|generate:dll] [options]
+txl-docs [start|generate:dll|deploy] [options]
 ```
 
 `start [options]` runs server at localhost:[port] for txl docs
@@ -26,6 +26,18 @@ txl-docs [start|generate:dll] [options]
 | `-l, --log-level` | Specify log level: [level], (debug, info, warn, error, off) | info |
 
 `generate:dll` creates a vendor dll, and is used to force the docs to recreate a dll. This dll should update automatically on start if the package.json has changed since the last run. But if you need to force the update or if the vendor.dll becomes broken run this command.
+
+`deploy [options]` builds the productions version of the docs, and uploads them to S3.
+
+| Option | Description | Default |
+| --- | --- | --- |
+| `-b, -s3-Bucket` | the name of the current s3 bucket for the docs | tune-frontend |
+| `-B, --no-build` | Skip the build step. | false |
+| `-U, --no-upload` | Skip the upload step. | false |
+| `-i, --key-id [id]` | The Aws access key | `process.env.AWS_ACCESS_KEY_ID` |
+| `-s, --secret-key [id]` | The Aws secret access key id | `process.env.AWS_SECRET_ACCESS_KEY` |
+
+> Aws credentials can also be configured through your `~/.aws/credentials` file.
 
 ## Documenting components
 

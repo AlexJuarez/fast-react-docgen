@@ -30,8 +30,8 @@ program
 program
   .command('deploy')
   .option('-b, --s3-bucket [bucket]', 'The S3 Bucket', 'tune-frontend')
-  .option('-B, --no-build', 'Do not preform the build, and don\'t upload', false)
-  .option('-U, --no-upload', 'Do not preform the upload, don\'t build', false)
+  .option('-B, --no-build', 'Skip the build step', false)
+  .option('-U, --no-upload', 'Skip the upload step', false)
   .option('-i, --key-id [id]', 'The AWS access key id', process.env.AWS_ACCESS_KEY_ID)
   .option('-s, --secret-key [id]', 'The AWS secret access key id', process.env.AWS_SECRET_ACCESS_KEY)
   .action((options) => {
