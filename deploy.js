@@ -3,8 +3,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const mime = require('mime');
 
-process.env.NODE_ENV = 'production';
-
 const upload = ({ awsKey, awsSecret, bucket }) => new Promise((resolve, reject) => {
   const client = s3.createClient({
     accessKeyId: awsKey,
@@ -38,6 +36,7 @@ const upload = ({ awsKey, awsSecret, bucket }) => new Promise((resolve, reject) 
 const build = () => new Promise(resolve => {
   fs.emptyDirSync(path.resolve(__dirname, 'public'));
 
+  process.env.NODE_ENV = 'production';
   const compiler = require('webpack')(require('./webpack.config'));
   compiler.run((err, stats) => {
     resolve(stats);

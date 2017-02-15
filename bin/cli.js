@@ -6,7 +6,6 @@ const constants = require('./../server/util/constants');
 const Run = require('./../run');
 const generateDll = require('./../webpack/generateDll');
 const Deploy = require('./../deploy');
-const invariant = require('invariant');
 
 program
   .version(pkg.version);

@@ -38,7 +38,7 @@ const Layout = (props: Props) => {
       <div style={PAGE_CONTAINER_STYLE}>
         <NavBar
           items={items}
-          title={title}
+          title={title || 'all'}
           category={category}
           router={router}
         />
