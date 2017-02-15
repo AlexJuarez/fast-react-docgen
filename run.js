@@ -26,7 +26,7 @@ const Run = (config) => {
     });
 
     if (DEV_MODE) {
-      server.on('ready', () => {
+      server.once('ready', () => {
         open(`http://0.0.0.0:${config.port}`);
       });
     }
