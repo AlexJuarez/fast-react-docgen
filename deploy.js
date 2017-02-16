@@ -63,6 +63,8 @@ const Deploy = (opts) => {
 
     fn().then(() => {
       execute(rest);
+    }).catch((err) => {
+      console.warn(err);
     });
   };
 
