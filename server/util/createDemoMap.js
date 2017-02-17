@@ -15,7 +15,7 @@ const shouldUpdateDemoMap = (filePath, newMap) => {
   }
 };
 
-module.exports = ({ cwd, demoExt }) => {
+module.exports = ({ cwd, demoExt }) => new Promise((resolve) => {
   const demos = glob.sync(`${cwd}/src/**/*${demoExt}`, { absolute: true });
 
   let output = demos
@@ -33,4 +33,6 @@ module.exports = ({ cwd, demoExt }) => {
       output
     );
   }
-};
+
+  resolve();
+});
