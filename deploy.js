@@ -2,6 +2,8 @@ const s3 = require('s3');
 const path = require('path');
 const fs = require('fs-extra');
 const mime = require('mime');
+const createDemoMap = require('./server/util/createDemoMap');
+const getTxlRoot = require('./server/getTxlRoot');
 
 const upload = ({ awsKey, awsSecret, bucket }) => new Promise((resolve, reject) => {
   const client = s3.createClient({
@@ -33,13 +35,17 @@ const upload = ({ awsKey, awsSecret, bucket }) => new Promise((resolve, reject) 
   });
 });
 
-const build = () => new Promise(resolve => {
+const build = () => new Promise((resolve) => {
   fs.emptyDirSync(path.resolve(__dirname, 'public'));
 
-  process.env.NODE_ENV = 'production';
-  const compiler = require('webpack')(require('./webpack.config'));
-  compiler.run((err, stats) => {
-    resolve(stats);
+  const TXL_ROOT = getTxlRoot();
+
+  createDemoMap({ cwd: TXL_ROOT, demoExt: '.demo.jsx' }).then(() => {
+    process.env.NODE_ENV = 'production';
+    const compiler = require('webpack')(require('./webpack.config'));
+    compiler.run((err, stats) => {
+      resolve(stats);
+    });
   });
 });
 
