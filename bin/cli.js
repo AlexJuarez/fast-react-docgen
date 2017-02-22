@@ -28,7 +28,7 @@ program
 
 program
   .command('deploy')
-  .option('-b, --s3-bucket [bucket]', 'The S3 Bucket', 'tune-frontend')
+  .option('-b, --s3-bucket [bucket]', 'The S3 Bucket', 'txl.tune.com')
   .option('-B, --no-build', 'Skip the build step', false)
   .option('-U, --no-upload', 'Skip the upload step', false)
   .option('-i, --key-id [id]', 'The AWS access key id', process.env.AWS_ACCESS_KEY_ID)
