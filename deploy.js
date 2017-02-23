@@ -7,9 +7,11 @@ const getTxlRoot = require('./server/getTxlRoot');
 
 const upload = ({ awsKey, awsSecret, bucket, region }) => new Promise((resolve, reject) => {
   const client = s3.createClient({
-    accessKeyId: awsKey,
-    region,
-    secretAccessKey: awsSecret,
+    s3Options: {
+      accessKeyId: awsKey,
+      region,
+      secretAccessKey: awsSecret,
+    },
   });
 
   const uploader = client.uploadDir({
