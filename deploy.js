@@ -5,9 +5,10 @@ const mime = require('mime');
 const createDemoMap = require('./server/util/createDemoMap');
 const getTxlRoot = require('./server/getTxlRoot');
 
-const upload = ({ awsKey, awsSecret, bucket }) => new Promise((resolve, reject) => {
+const upload = ({ awsKey, awsSecret, bucket, region }) => new Promise((resolve, reject) => {
   const client = s3.createClient({
     accessKeyId: awsKey,
+    region,
     secretAccessKey: awsSecret,
   });
 
