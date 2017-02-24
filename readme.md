@@ -31,7 +31,8 @@ txl-docs [start|generate:dll|deploy] [options]
 
 | Option | Description | Default |
 | --- | --- | --- |
-| `-b, -s3-Bucket` | the name of the current s3 bucket for the docs | tune-frontend |
+| `-b, -s3-Bucket` | the name of the current s3 bucket for the docs | txl.tune.com |
+| `-r, --region` | the region of the bucket | us-west-2 |
 | `-B, --no-build` | Skip the build step. | false |
 | `-U, --no-upload` | Skip the upload step. | false |
 | `-i, --key-id [id]` | The Aws access key | `process.env.AWS_ACCESS_KEY_ID` |
