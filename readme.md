@@ -31,7 +31,7 @@ txl-docs [start|generate:dll|deploy] [options]
 
 | Option | Description | Default |
 | --- | --- | --- |
-| `-b, -s3-Bucket` | the name of the current s3 bucket for the docs | txl.tune.com |
+| `-b, --s3-Bucket` | the name of the current s3 bucket for the docs | txl.tune.com |
 | `-r, --region` | the region of the bucket | us-west-2 |
 | `--demo-ext [ext]` | Specify demo file extension | .demo.jsx |
 | `-B, --no-build` | Skip the build step. | false |
