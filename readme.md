@@ -21,7 +21,7 @@ txl-docs [start|generate:dll|deploy] [options]
 
 | Option | Description | Default |
 | --- | --- | --- |
-| `--demo-ext [ext]` | Specify demo find extension | .demo.jsx |
+| `--demo-ext [ext]` | Specify demo file extension | .demo.jsx |
 | `-p, --port [port]` | Specify port: [port] | 8080 |
 | `-l, --log-level` | Specify log level: [level], (debug, info, warn, error, off) | info |
 
@@ -33,6 +33,7 @@ txl-docs [start|generate:dll|deploy] [options]
 | --- | --- | --- |
 | `-b, -s3-Bucket` | the name of the current s3 bucket for the docs | txl.tune.com |
 | `-r, --region` | the region of the bucket | us-west-2 |
+| `--demo-ext [ext]` | Specify demo file extension | .demo.jsx |
 | `-B, --no-build` | Skip the build step. | false |
 | `-U, --no-upload` | Skip the upload step. | false |
 | `-i, --key-id [id]` | The Aws access key | `process.env.AWS_ACCESS_KEY_ID` |

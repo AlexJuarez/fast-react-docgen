@@ -29,9 +29,10 @@ program
 program
   .command('deploy')
   .option('-b, --s3-bucket [bucket]', 'The S3 Bucket', 'txl.tune.com')
+  .option('-r, --region [region]', 'The AWS bucket region', 'us-west-2')
   .option('-B, --no-build', 'Skip the build step', false)
   .option('-U, --no-upload', 'Skip the upload step', false)
-  .option('-r, --region [region]', 'The AWS bucket region', 'us-west-2')
+  .option('--demo-ext [ext]', 'Specify demo file extension: [ext]', '.demo.jsx')
   .option('-i, --key-id [id]', 'The AWS access key id', process.env.AWS_ACCESS_KEY_ID)
   .option('-s, --secret-key [id]', 'The AWS secret access key id', process.env.AWS_SECRET_ACCESS_KEY)
   .action((options) => {
@@ -40,6 +41,7 @@ program
       awsSecret: options.secretKey,
       bucket: options.s3Bucket,
       build: options.build,
+      demoExt: options.demoExt,
       region: options.region,
       upload: options.upload,
     });

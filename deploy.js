@@ -38,12 +38,12 @@ const upload = ({ awsKey, awsSecret, bucket, region }) => new Promise((resolve, 
   });
 });
 
-const build = () => new Promise((resolve) => {
+const build = ({ demoExt }) => new Promise((resolve) => {
   fs.emptyDirSync(path.resolve(__dirname, 'public'));
 
   const TXL_ROOT = getTxlRoot();
 
-  createDemoMap({ cwd: TXL_ROOT, demoExt: '.demo.jsx' }).then(() => {
+  createDemoMap({ cwd: TXL_ROOT, demoExt }).then(() => {
     process.env.NODE_ENV = 'production';
     const compiler = require('webpack')(require('./webpack.config'));
     compiler.run((err, stats) => {
@@ -54,7 +54,7 @@ const build = () => new Promise((resolve) => {
 
 const Deploy = (opts) => {
   const cmds = [
-    (opts.build ? () => build() : null),
+    (opts.build ? () => build(opts) : null),
     (opts.upload ? () => upload(opts) : null)
   ];
 
