@@ -6,13 +6,14 @@ const convertPath = require('./convertPath');
 const removeExt = filePath => filePath.replace(/\.jsx|\.js/, '');
 
 const getPkg = (filePath) => {
-  const parts = filePath.split(path.sep);
-  const index = parts.indexOf('node_modules');
-
-  const pkgPath = path.resolve(parts.slice(0, index + 2).join(path.sep), 'package.json');
+  let root = path.dirname(filePath);
   /* eslint import/no-dynamic-require: 0, global-require: off */
-  if (fs.existsSync(pkgPath)) {
-    return require(pkgPath);
+  while (root.length > 1 && root.indexOf('node_modules') >= 0) {
+    const pkgPath = path.resolve(root, 'package.json');
+    if (fs.existsSync(pkgPath)) {
+      return require(pkgPath);
+    }
+    root = path.dirname(root);
   }
 
   return {};
@@ -36,7 +37,7 @@ const getName = (filePath) => {
   rest = trimPath(rest, name);
   rest = trimPath(rest, main);
 
-  return path.join(name, rest);
+  return pkg.name != null ? name : path.join(name, rest);
 };
 
 const getModuleName = (filePath, cwd) => {

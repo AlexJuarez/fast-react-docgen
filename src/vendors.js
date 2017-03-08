@@ -5,6 +5,7 @@ require('redux');
 require('superagent');
 require('redux-thunk');
 require('redux-logger');
+require('immutable');
 require('react-router-redux');
 require('redux-devtools');
 require('redux-devtools-log-monitor');

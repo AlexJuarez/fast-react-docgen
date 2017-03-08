@@ -1,5 +1,6 @@
 module.exports = {
   'txl/_data-grid/DataGrid.demo.jsx': require('txl/_data-grid/DataGrid.demo.jsx'),
+  'txl/_date-time-range-picker/DateTimeRangePicker.demo.jsx': require('txl/_date-time-range-picker/DateTimeRangePicker.demo.jsx'),
   'txl/_tooltips/_TooltipContent.demo.jsx': require('txl/_tooltips/_TooltipContent.demo.jsx'),
   'txl/_tooltips/CursorTooltipTarget.demo.jsx': require('txl/_tooltips/CursorTooltipTarget.demo.jsx'),
   'txl/_tooltips/FixedTooltipTarget.demo.jsx': require('txl/_tooltips/FixedTooltipTarget.demo.jsx'),
@@ -68,6 +69,7 @@ module.exports = {
   'txl/progress-indicators/DotsLoadingIndicator.demo.jsx': require('txl/progress-indicators/DotsLoadingIndicator.demo.jsx'),
   'txl/progress-indicators/LoadingIndicator.demo.jsx': require('txl/progress-indicators/LoadingIndicator.demo.jsx'),
   'txl/progress-indicators/ProgressBar.demo.jsx': require('txl/progress-indicators/ProgressBar.demo.jsx'),
+  'txl/scrolling-table/ScrollingTable.demo.jsx': require('txl/scrolling-table/ScrollingTable.demo.jsx'),
   'txl/tabs/Tabs.demo.jsx': require('txl/tabs/Tabs.demo.jsx'),
   'txl/tag/Tag.demo.jsx': require('txl/tag/Tag.demo.jsx'),
   'txl/text/MiddleTruncatedText.demo.jsx': require('txl/text/MiddleTruncatedText.demo.jsx'),
