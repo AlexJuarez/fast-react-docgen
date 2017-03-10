@@ -25,11 +25,12 @@ const getImports = () => {
 
 const imports = getImports();
 
-const getDocs = (src) => {
+const getDocs = (src, path) => {
   try {
     return docgen.parse(src);
   } catch (err) {
-    log.debug(err.message);
+    log.debug(path, err.message);
+    log.warn(err.stack);
   }
 
   return {};
@@ -101,7 +102,7 @@ module.exports = (filePath, { cwd }) => {
   components.forEach((componentPath) => {
     getCache(componentPath, () => {
       const src = fs.readFileSync(componentPath, { encoding: 'utf8' });
-      return getDocs(src);
+      return getDocs(src, componentPath);
     });
   });
 
