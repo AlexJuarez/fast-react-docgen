@@ -2,6 +2,7 @@ flow-typed/
 .eslintrc.js
 .eslintcache
 .eslintignore
+.docs.cache
 .flowconfig
 .gitignore
 public/
