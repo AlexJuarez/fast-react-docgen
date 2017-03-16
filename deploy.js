@@ -2,6 +2,8 @@ const s3 = require('s3');
 const path = require('path');
 const fs = require('fs-extra');
 const mime = require('mime');
+const glob = require('glob');
+const { gzip } = require('zlib');
 const createDemoMap = require('./server/util/createDemoMap');
 const getTxlRoot = require('./server/getTxlRoot');
 
@@ -21,6 +23,7 @@ const upload = ({ awsKey, awsSecret, bucket, region }) => new Promise((resolve, 
     },
     getS3Params: (localFile, stat, callback) => {
       const s3Params = {
+        ContentEncoding: 'gzip',
         ContentType: mime.lookup(localFile, 'application/json'),
       };
 
@@ -38,6 +41,23 @@ const upload = ({ awsKey, awsSecret, bucket, region }) => new Promise((resolve, 
   });
 });
 
+const compress = () => new Promise((resolve) => {
+  const files = glob.sync('**/*', { absolute: true, cwd: path.resolve(__dirname, 'public'), nodir: true });
+
+  return Promise.all(files
+    .map(file => new Promise((done) => {
+      const content = fs.readFileSync(file);
+      gzip(content.toString(), (err, result) => {
+        fs.writeFileSync(file, result);
+        done();
+      });
+    }))
+  ).then(() => {
+    console.log('gzip compression complete');
+    resolve();
+  });
+});
+
 const build = ({ demoExt }) => new Promise((resolve) => {
   fs.emptyDirSync(path.resolve(__dirname, 'public'));
 
@@ -47,6 +67,7 @@ const build = ({ demoExt }) => new Promise((resolve) => {
     process.env.NODE_ENV = 'production';
     const compiler = require('webpack')(require('./webpack.config'));
     compiler.run((err, stats) => {
+      compress();
       resolve(stats);
     });
   });
