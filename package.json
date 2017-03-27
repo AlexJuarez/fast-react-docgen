@@ -1,6 +1,6 @@
 {
   "name": "txl-docs",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "",
   "main": "./run.js",
   "scripts": {
