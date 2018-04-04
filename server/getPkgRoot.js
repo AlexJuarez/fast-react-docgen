@@ -8,11 +8,7 @@ const log = logger.create('server-utils');
 
 let PKG_ROOT = null;
 
-const resolvePath = require('./files/resolvePath');
-
-const findPkgRoot = (file) => {
-  const fp = resolvePath(file);
-
+const findPkgRoot = (fp) => {
   let root = path.dirname(fp);
   while (root.length) {
     const pkgPath = path.resolve(root, 'package.json');

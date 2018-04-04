@@ -8,7 +8,7 @@ const logger = require('./util/logger');
 const routes = require('./routes');
 const webpack = require('./webpack');
 
-const FileMap = require('./files/FileMap');
+const DependencyGraph = require('./files/DependencyGraph');
 
 const log = logger.create('server');
 
@@ -20,8 +20,9 @@ class Server extends EventEmitter {
     this._app = express();
     this._config = config;
     const { file, root } = config;
-    this._fileMap = new FileMap(root, file);
-    console.log(this._fileMap.files);
+    this._dependencies = new DependencyGraph(root);
+    this._dependencies.register(file, root);
+    console.log(Object.keys(this._dependencies.files.files));
     this.use(compression());
   }
 

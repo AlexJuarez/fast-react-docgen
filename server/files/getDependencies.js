@@ -3,6 +3,7 @@ const parser = require('../docgen/parser/babylon');
 
 const getDependencies = (source) => {
   const dependencies = [];
+
   const j = jscodeshift.withParser(parser);
 
   const root = j(source);
@@ -28,4 +29,14 @@ const getDependencies = (source) => {
   return dependencies;
 };
 
-module.exports = getDependencies;
+module.exports = (fileNode) => {
+  if (fileNode.ext !== '.js' && fileNode.ext !== '.jsx') {
+    return [];
+  }
+
+  try {
+    return getDependencies(fileNode.getSource());
+  } catch (err) {
+    return [];
+  }
+};
