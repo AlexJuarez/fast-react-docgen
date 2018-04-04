@@ -22,7 +22,6 @@ class Server extends EventEmitter {
     const { file, root } = config;
     this._dependencies = new DependencyGraph(root);
     this._dependencies.register(file, root);
-    console.log(Object.keys(this._dependencies.files.files));
     this.use(compression());
   }
 

@@ -10,9 +10,6 @@ class DependencyGraph {
 
   register(name, cwd) {
     const pathNode = this.resolve(name, cwd);
-
-    console.log(pathNode);
-
     if (!pathNode.valid()) {
       return;
     }
