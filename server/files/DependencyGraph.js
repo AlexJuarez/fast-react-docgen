@@ -1,11 +1,14 @@
 const FileMap = require('./FileMap');
 const PathResolver = require('./PathResolver');
+const memoize = require('../util/memoize');
 
 class DependencyGraph {
   constructor(root) {
     this.files = new FileMap();
     const resolver = new PathResolver(root);
-    this.resolve = (name, cwd) => resolver.createPathNode(name, cwd);
+    const resolve = (name, cwd) => resolver.createPathNode(name, cwd);
+    const keyFn = (name, cwd) => `${cwd}/${name}`;    
+    this.resolve = memoize(keyFn, resolve);
   }
 
   register(name, cwd) {
@@ -16,11 +19,11 @@ class DependencyGraph {
 
     const { path } = pathNode;
   
-    if (!this.files.has(path)) {
+    if (!this.files.has(pathNode)) {
       this.files.add(pathNode);
     }
 
-    const file = this.files.get(path);
+    const file = this.files.get(pathNode);
     if (!file.isStale()) {
       return;
     }

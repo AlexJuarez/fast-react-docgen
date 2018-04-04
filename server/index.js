@@ -20,8 +20,10 @@ class Server extends EventEmitter {
     this._app = express();
     this._config = config;
     const { file, root } = config;
+    const start = new Date();
     this._dependencies = new DependencyGraph(root);
     this._dependencies.register(file, root);
+    console.log(`time: ${new Date() - start}ms`);
     this.use(compression());
   }
 

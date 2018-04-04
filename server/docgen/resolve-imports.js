@@ -75,7 +75,7 @@ module.exports = (cwd) => {
     try {
       return resolver.resolveSync({}, cwd, name);
     } catch (err) {
-      console.log(err);
+      console.log(`could not find file ${name}, in context: ${cwd}`);
     }
 
     return null;

@@ -23,12 +23,13 @@ const pathTypes = (pathNode) => {
   const { name, cwd } = pathNode;
   switch (pathNode.type(name)) {
     case 'builtin':
+      pathNode.path = null;
       break;
     case 'external':
       pathNode.path = name;
       break;
     default: {
-      pathNode.path = pathNode.isAbsolute(name) ? name : path.join(cwd, name);
+      pathNode.path = pathNode.isAbsolute(name) ? name : path.resolve(cwd, name);
       break;
     }
   }
@@ -37,12 +38,18 @@ const pathTypes = (pathNode) => {
 const expandPaths = (pathNode) => {
   const { name } = pathNode;
 
-  pathNode.name = name.replace(':monorail', './app/assests/javascripts');
-  pathNode.name = name.replace(':', path.join(pathNode.root, '/frontend/'));
+  pathNode.name = name.replace(':monorail', path.resolve(pathNode.root, 'app/assets/javascripts'));
+
+  if (pathNode.name.startsWith(':')) {
+    pathNode.path = null; //name.replace(':', path.join(pathNode.root, '/frontend/'));
+  }
 }
 
 const resolvePath = (pathNode) => {
-  pathNode.path = pathNode.resolve(pathNode.path);
+  const { path } = pathNode;
+  if (path != null) {
+    pathNode.path = pathNode.resolve(path);
+  }
 }
 
 class PathResolver {

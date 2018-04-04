@@ -5,11 +5,11 @@ class FileMap {
     this.files = {};
   }
 
-  get(path) {
+  get({ path }) {
     return this.files[path];
   }
 
-  has(path) {
+  has({ path }) {
     return this.files[path] != null;
   }
 
