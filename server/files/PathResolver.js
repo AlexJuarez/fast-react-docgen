@@ -3,6 +3,24 @@ const fs = require('fs');
 
 const Resolver = require('../docgen/resolve-imports');
 
+const readProjectConfig = (dir) => {
+  const file = ['.projectrc', 'project.json5'].map(f => path.join(dir,f)).filter(fs.existsSync).shift();
+  try {
+    return file != null && JSON.parse(fs.readFileSync(file, { encoding: 'utf8' }));
+  } catch (err) {
+    return {};
+  }
+}
+
+const getProjectMainPath = (pathNode) => {
+  const { name } = pathNode;
+
+  const dir = path.resolve(pathNode.root, 'frontend', name.replace(':', ''));
+  const config = readProjectConfig(dir);
+  const { main } = config;
+  return main != null ? path.join(dir, main) : dir;
+};
+
 class Path {
   constructor(name, cwd, resolver, root) {
     this.name = name;
@@ -25,6 +43,7 @@ const pathTypes = (pathNode) => {
     case 'builtin':
       pathNode.path = null;
       break;
+    case 'project':
     case 'external':
       pathNode.path = name;
       break;
@@ -40,9 +59,11 @@ const expandPaths = (pathNode) => {
 
   pathNode.name = name.replace(':monorail', path.resolve(pathNode.root, 'app/assets/javascripts'));
 
-  if (pathNode.name.startsWith(':')) {
-    pathNode.path = null; //name.replace(':', path.join(pathNode.root, '/frontend/'));
+  if (pathNode.type(pathNode.name) !== 'project') {
+    return;
   }
+  
+  pathNode.name = getProjectMainPath(pathNode);
 }
 
 const resolvePath = (pathNode) => {

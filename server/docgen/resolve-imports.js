@@ -10,6 +10,10 @@ function isBuiltIn(name) {
   return builtinModules.indexOf(name) !== -1;
 }
 
+function isProjectRoot(name) {
+  return name.startsWith(':');
+}
+
 function isExternalPath(name, path) {
   return !path || path.indexOf(join('node_modules', name)) > -1;
 }
@@ -45,6 +49,7 @@ const rules = [
   [isBuiltIn, 'builtin'],
   [isExternalModule, 'external'],
   [isScoped, 'external'],
+  [isProjectRoot, 'project'],
   [isInternalModule, 'internal'],
   [isRelativeToParent, 'parent'],
   [isIndex, 'index'],

@@ -6,6 +6,7 @@ class DependencyGraph {
   constructor(root) {
     this.files = new FileMap();
     const resolver = new PathResolver(root);
+
     const resolve = (name, cwd) => resolver.createPathNode(name, cwd);
     const keyFn = (name, cwd) => `${cwd}/${name}`;    
     this.resolve = memoize(keyFn, resolve);
