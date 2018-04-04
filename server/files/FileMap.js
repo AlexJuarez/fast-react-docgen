@@ -13,9 +13,11 @@ class FileMap {
     return this.files[path] != null;
   }
 
-  add(path, type) {
+  add(pathNode) {
+    const { path } = pathNode;
+
     if (!this.has(path)) {
-      this.files[path] = new FileNode({ path, type });
+      this.files[path] = new FileNode(pathNode);
     }
   }
 }

@@ -3,11 +3,11 @@ const throttle = require('lodash/throttle');
 const fs = require('fs');
 
 const getDependencies = require('./getDependencies');
-
+ 
 class FileNode {
-  constructor({ path, type }) {
-    this.path = path;
-    this.type = type;
+  constructor(pathNode) {
+    this.pathNode = pathNode;
+    const { path, type } = pathNode;
     this.dirname = dirname(path);
     this.ext = extname(path);
     this.isStale = throttle(this.isStale.bind(this), 100);

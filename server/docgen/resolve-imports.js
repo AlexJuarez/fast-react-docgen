@@ -75,7 +75,7 @@ module.exports = (cwd) => {
     try {
       return resolver.resolveSync({}, cwd, name);
     } catch (err) {
-      console.warn(err);
+      console.log(err);
     }
 
     return null;
