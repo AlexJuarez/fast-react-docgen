@@ -1,45 +1,56 @@
+const path = require('path');
+const fs = require('fs');
 
 const Resolver = require('../docgen/resolve-imports');
-const Path = require('./Path');
+
+class Path {
+  constructor(name, cwd, resolver, root) {
+    this.name = name;
+    this.cwd = cwd;
+    this.root = root;
+    this.type = (name) => resolver.type(name);
+    this.path = name;
+    this.resolve = (path) => resolver.resolve(path);
+    this.isAbsolute = (name) => resolver.isAbsolute(name);
+  }
+
+  valid() {
+    return this.path != null && fs.existsSync(this.path);
+  }
+}
 
 const pathTypes = (pathNode) => {
-  const { name, cwd, type } = pathNode;
-  switch (type) {
+  const { name, cwd } = pathNode;
+  switch (pathNode.type(name)) {
     case 'builtin':
       break;
     case 'external':
       pathNode.path = name;
       break;
     default: {
-      pathNode.path = this.isAbsolute(name) ? name : path.join(cwd, name);
+      pathNode.path = pathNode.isAbsolute(name) ? name : path.join(cwd, name);
       break;
     }
   }
 }
 
 const expandPaths = (pathNode) => {
-  const { path } = pathNode;
+  const { name } = pathNode;
 
-  if (!path.startsWith(':')) {
-    return;
-  }
-
-  path.replace(':monorail', './app/assests/javascripts');
-  path.replace(':', './frontend/');
+  pathNode.name = name.replace(':monorail', './app/assests/javascripts');
+  pathNode.name = name.replace(':', path.join(pathNode.root, '/frontend/'));
 }
 
 const resolvePath = (pathNode) => {
-  pathNode.path = this.resolve(pathNode.path);
+  pathNode.path = pathNode.resolve(pathNode.path);
 }
 
 class PathResolver {
   constructor(root) {
-    const { resolve, type, isAbsolute } = Resolver(root);
-    this.resolve = resolve;
-    this.isAbsolute = isAbsolute;
-    this.type = type;
-  
+    this.root = root;
+    this.resolver = Resolver(root);
     this.fns = [];
+
     this.add(expandPaths);
     this.add(pathTypes);
     this.add(resolvePath);
@@ -49,14 +60,13 @@ class PathResolver {
     this.fns.push(middleware.bind(this));
   }
 
-  resolve(name, cwd = '') {
-    const type = this.type(name);
-    const pathNode = new Path(name, cwd, type);
+  createPathNode(name, cwd = '') {
+    const pathNode = new Path(name, cwd, this.resolver, this.root);
 
     for (let i = 0; i < this.fns.length; i++) {
-      const fn = fns[i];
+      const fn = this.fns[i];
 
-      fn.call(this, pathNode);
+      fn(pathNode);
     }
 
     return pathNode;

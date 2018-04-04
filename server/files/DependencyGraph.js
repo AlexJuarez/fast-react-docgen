@@ -4,13 +4,16 @@ const PathResolver = require('./PathResolver');
 class DependencyGraph {
   constructor(root) {
     this.files = new FileMap();
-    this.pathResolver = new PathResolver(root);
+    const resolver = new PathResolver(root);
+    this.resolve = (name, cwd) => resolver.createPathNode(name, cwd);
   }
 
   register(name, cwd) {
-    const pathNode = this.pathResolver.resolve(name, cwd);
+    const pathNode = this.resolve(name, cwd);
 
-    if (!pathNode.isValid()) {
+    console.log(pathNode);
+
+    if (!pathNode.valid()) {
       return;
     }
 

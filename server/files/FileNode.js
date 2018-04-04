@@ -8,6 +8,8 @@ class FileNode {
   constructor(pathNode) {
     this.pathNode = pathNode;
     const { path, type } = pathNode;
+    this.path = path;
+    this.type = type;
     this.dirname = dirname(path);
     this.ext = extname(path);
     this.isStale = throttle(this.isStale.bind(this), 100);
