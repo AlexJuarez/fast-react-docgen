@@ -21,7 +21,7 @@ const set = (demoExt = '.demo.jsx') => {
     cache.navItems.then((items) => {
       const imports = {};
       items.files.forEach((f) => {
-        const fullPath = convertPath.fullPath(f.path);
+        const fullPath = convertPath.expandPath(f.path);
         imports[f.id] = parseImports(fullPath, opts);
       });
       resolve(imports);

@@ -65,7 +65,7 @@ const parseResource = (module, cwd) => {
     return getModuleName(module.userRequest, cwd);
   }
 
-  return convertPath.txlPath(module.userRequest);
+  return convertPath.truncatePath(module.userRequest);
 };
 
 const resolveModuleInfo = (module, cwd) => {
@@ -84,7 +84,7 @@ const resolveModuleInfo = (module, cwd) => {
 
   return {
     name: parseResource(module, cwd),
-    path: convertPath.txlPath(module.userRequest, cwd),
+    path: convertPath.truncatePath(module.userRequest, cwd),
     vendor: typeof module.id === 'number',
   };
 };

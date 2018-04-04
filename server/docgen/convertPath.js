@@ -1,14 +1,12 @@
 const path = require('path');
 
-const getTxlRoot = require('../getTxlRoot');
+const getPkgRoot = require('../getPkgRoot');
 
-const TxlSrc = () => path.join(getTxlRoot(), 'src');
+const truncatePath = filePath => filePath.replace(getPkgRoot(), ':remote');
 
-const txlPath = filePath => filePath.replace(TxlSrc(), 'txl');
-
-const fullPath = filePath => filePath.replace('txl', TxlSrc());
+const expandPath = filePath => filePath.replace(':remote', getPkgRoot());
 
 module.exports = {
-  fullPath,
-  txlPath,
+  truncatePath,
+  expandPath,
 };

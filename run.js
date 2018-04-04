@@ -1,44 +1,26 @@
-const open = require('open');
-
 const logger = require('./server/util/logger');
-const generateDll = require('./webpack/generateDll');
-const createDemoMap = require('./server/util/createDemoMap');
-const getTxlRoot = require('./server/getTxlRoot');
+const getPkgRoot = require('./server/getPkgRoot');
 
 const DEV_MODE = (process.env.NODE_ENV !== 'production');
 
-/* eslint import/no-dynamic-require: off, consistent-return: off */
-
-const Run = (config) => {
+const Run = (file, config) => {
   logger.setup(config.logLevel, true);
-  const TXL_ROOT = getTxlRoot();
+  const PKG_ROOT = getPkgRoot(file);
 
   const Start = () => {
     const Server = require('./server');
 
-    createDemoMap({ cwd: TXL_ROOT, demoExt: config.demoExt });
-
     const server = new Server({
-      cwd: TXL_ROOT,
-      demoExt: config.demoExt,
+      root: PKG_ROOT,
+      file,
       port: config.port,
       showStats: config.showStats,
     });
 
-    if (DEV_MODE) {
-      server.once('ready', () => {
-        open(`http://0.0.0.0:${config.port}`);
-      });
-    }
-
     server.start();
   };
 
-  if (DEV_MODE) {
-    generateDll(false, Start);
-  } else {
-    Start();
-  }
+  Start();
 };
 
 module.exports = Run;
