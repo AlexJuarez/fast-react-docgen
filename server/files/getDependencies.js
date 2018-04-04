@@ -1,16 +1,28 @@
 const jscodeshift = require('jscodeshift');
+const parser = require('../docgen/parser/babylon');
 
 const getDependencies = (source) => {
   const dependencies = [];
-
-  const parser = require('./parser/babylon');
   const j = jscodeshift.withParser(parser);
 
-  j(source)
+  const root = j(source);
+  root
     .find(j.ImportDeclaration)
-    .forEach((p) => {
+    .forEach(p => {
       const name = p.value.source.value;
       dependencies.push(name);
+    });
+
+  root
+    .find(j.CallExpression, {
+      callee: {
+        name: 'require'
+      }
+    })
+    .forEach(p => {
+      p.value.arguments.forEach(arg => {
+        dependencies.push(arg.value);
+      });
     });
 
   return dependencies;

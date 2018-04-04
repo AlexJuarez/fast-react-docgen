@@ -10,7 +10,9 @@ class FileNode {
     this.path = path;
     this.type = type;
     this.isStale = throttle(this.isStale.bind(this), 100);
-    this.refresh();
+    this.mtime = null;
+    this.source = null;
+    this.dependencies = null;
   }
 
   isStale() {

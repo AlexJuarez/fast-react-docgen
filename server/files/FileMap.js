@@ -11,6 +11,10 @@ class FileMap {
   get(name) {
     const path = this.resolver.resolve(name);
 
+    if (path == null) {
+      return null;
+    }
+
     if (this.files[path] == null) {
       this.files[path] = new FileNode({ name, path, type: this.resolver.type(name) });
     }
@@ -20,8 +24,7 @@ class FileMap {
 
   add(name) {
     const file = this.get(name);
-
-    if (file.isStale()) {
+    if (file != null && file.isStale()) {
       file.refresh();
 
       file.getDependencies().forEach(path => {
