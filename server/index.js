@@ -8,6 +8,8 @@ const logger = require('./util/logger');
 const routes = require('./routes');
 const webpack = require('./webpack');
 
+const FileMap = require('./files/FileMap');
+
 const log = logger.create('server');
 
 class Server extends EventEmitter {
@@ -17,7 +19,9 @@ class Server extends EventEmitter {
     this._port = config.port || process.env.PORT;
     this._app = express();
     this._config = config;
-
+    const { file, root } = config;
+    this._fileMap = new FileMap(root, file);
+    console.log(this._fileMap.files);
     this.use(compression());
   }
 
@@ -30,7 +34,7 @@ class Server extends EventEmitter {
   }
 
   start() {
-    webpack(this._app).then(() => {
+    /* webpack(this._app).then(() => {
       routes(this._app);
 
       this._server = http.createServer(this._app).listen(this._port);
@@ -39,7 +43,7 @@ class Server extends EventEmitter {
 
       log.info(`listening at localhost:${port} & 0.0.0.0:${port}`);
       this.emit('ready');
-    });
+    }); */
   }
 }
 

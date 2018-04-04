@@ -8,7 +8,7 @@ const log = logger.create('server-utils');
 
 let PKG_ROOT = null;
 
-const resolvePath = (file) => path.isAbsolute(file) ? path.resolve(file) : path.resolve(process.cwd(), file);
+const resolvePath = require('./files/resolvePath');
 
 const findPkgRoot = (file) => {
   const fp = resolvePath(file);

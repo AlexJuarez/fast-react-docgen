@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const txlRoot = require('./server/getTxlRoot');
+const txlRoot = require('./server/getPkgRoot');
 
 const DEV_MODE = (process.env.NODE_ENV !== 'production');
 
